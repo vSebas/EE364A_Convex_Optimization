@@ -1,0 +1,120 @@
+\section*{5.1 A simple example}
+
+\textbf{(a)}
+\begin{itemize}
+    \item Feasible set: from the constraint we obtain$\{x \mid 2 \leq x \leq 4\}$.
+    \item Optimal point: since objective is a convex function, $x^\star = 2$ is the point that minimizes the objective
+    \item Optimal value: $p^\star = 5$ 
+\end{itemize}
+
+\textbf{(b)}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{img/img1.png}
+    \caption{Plot of objective $f_0$ (red), showing feasible set (blue) and optimal point (green).}
+\end{figure}
+The constraint can be rewritten as $f_1(x) = (x-2)(x-4) = x^2 - 6x + 8 \leq 0$.
+
+The Lagrangian is:
+\[
+L(x, \lambda) = f_0(x) + \lambda f_1(x) = (x^2 + 1) + \lambda(x^2 - 6x + 8) = (1 + \lambda)x^2 - 6\lambda x + 1 + 8\lambda
+\]
+
+The dual function is $g(\lambda) = \inf_x L(x, \lambda)$, so we have to minimize the Lagrangian over $x$.
+
+\[
+\frac{\partial L}{\partial x} = 2(1 + \lambda)x - 6\lambda = 0 \implies x^\star = \frac{3\lambda}{1 + \lambda}
+\]
+
+Substituting back:
+\begin{align*}
+g(\lambda)
+&= L(x^\star, \lambda) = (1 + \lambda)\left(\frac{3\lambda}{1 + \lambda}\right)^2 - 6\lambda \cdot \frac{3\lambda}{1 + \lambda} + 1 + 8\lambda \\
+&= \frac{9\lambda^2}{1 + \lambda} - \frac{18\lambda^2}{1 + \lambda} + 1 + 8\lambda = \frac{-9\lambda^2}{1 + \lambda} + 1 + 8\lambda
+\end{align*}
+
+For $\lambda \leq -1$, the Lagrangian is unbounded below.
+
+Therefore:
+\[
+g(\lambda) = \begin{cases}
+\dfrac{-9\lambda^2}{1 + \lambda} + 1 + 8\lambda & \lambda > -1 \\[10pt]
+-\infty & \lambda \leq -1
+\end{cases}
+\]
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{img/img2.png}
+    \caption{Plot of dual function $g(\lambda)$}
+\end{figure}
+
+We can see that $g(\lambda) \leq p^\star = 5$ for all $\lambda \geq 0$, verifying the lower bound property. Strong equality $g(\lambda) = p^\star$ holds at $\lambda = 2$.
+
+\textbf{(c)}
+
+\[
+\begin{aligned}
+\text{maximize} \quad & \frac{-9\lambda^2}{1 + \lambda} + 1 + 8\lambda \\
+\text{s.t.} \quad & \lambda \geq 0
+\end{aligned}
+\]
+
+It is a concave maximization problem for $\lambda > -1$, as seen in the graph.
+
+To find the optimal $\lambda^\star$, we take the derivative and set it to zero:
+\[
+g^\prime(\lambda) = \frac{-18\lambda(1+\lambda) + 9\lambda^2}{(1+\lambda)^2} + 8 = \frac{-9\lambda^2 - 18\lambda}{(1+\lambda)^2} + 8 = 0
+\]
+\[
+\frac{-9\lambda(\lambda + 2)}{(1+\lambda)^2} + 8 = 0 \implies 8(1+\lambda)^2 = 9\lambda(\lambda + 2)
+\]
+\[
+\lambda^2 + 2\lambda - 8 = 0 \implies (\lambda + 4)(\lambda - 2) = 0
+\]
+
+Since $\lambda \geq 0$, the dual optimal is $\lambda^\star = 2$.
+
+So the dual optimal value is:
+\[
+d^\star = g(2) = 5
+\]
+
+Since $d^\star = p^\star = 5$, \textbf{strong duality holds}.
+
+\textbf{(d) Sensitivity analysis.}
+
+The constraint can be rewritten as
+\[
+(x-2)(x-4) = x^2 - 6x + 8 \leq u
+\quad \therefore \quad
+x^2 - 6x + (8-u) \le 0.
+\]
+
+The quadratic in $x$ attains nonpositive values if its discriminant is nonnegative, which is:
+\[
+(-6)^2 - 4(1)(8-u) = 36 - 32 + 4u = 4(1+u).
+\]
+Problem is feasible if $u \ge -1$, and the roots are $x = 3 \pm \sqrt{1+u}$, so the feasible set is $\{x \mid 3-\sqrt{1+u} \le x \le 3+\sqrt{1+u}\}$.
+For $-1 \le u \le 8$: the unconstrained minimizer $x=0$ is not feasible, so the optimal point is $x^\star(u)=3-\sqrt{1+u}$, with optimal value $p^\star(u)=1+(3-\sqrt{1+u})^2=11+u-6\sqrt{1+u}$.
+For $u \ge 8$ the constraint is inactive, $x^\star(u)=0$, and $p^\star(u)=1$.
+
+\[
+p^\star(u)=
+\begin{cases}
+\infty, & u<-1,\\[6pt]
+11+u-6\sqrt{1+u}, & -1 \le u \le 8,\\[6pt]
+1, & u \ge 8.
+\end{cases}
+\]
+
+At $u=0$,
+\[
+\frac{dp^\star}{du}\Big|_{u=0}=-2=-\lambda^\star,
+\]
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{img/a5_1d.png}
+\end{figure}

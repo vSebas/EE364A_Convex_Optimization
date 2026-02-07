@@ -1,0 +1,52 @@
+\section*{5.3 Problems with one inequality constraint}
+
+Lagrangian is $L(x, \lambda) = c^\top x + \lambda f(x)$.
+\\
+Dual function is, for $, x \in \text{dom} f_0(x)$
+\begin{align*}
+    g(\lambda) 
+    &= \inf_x L(x, \lambda) = \inf_x (c^\top x + \lambda f(x)) \\
+    &= \lambda \inf_x \left( (c/\lambda)^\top x + f(x) \right) \\
+    &= -\lambda \sup_x \left( (-c/\lambda)^\top x - f(x) \right) \\
+    &= -\lambda f^*(-c/\lambda) 
+\end{align*}
+
+where $f^*(y) = \sup_x (y^\top x - f(x))$ is the conjugate of $f$.
+
+\textbf{Dual Problem.}
+
+\[
+\begin{aligned}
+\text{maximize} \quad & -\lambda f^*(-c/\lambda) \\
+\text{s.t.} \quad & \lambda \geq 0
+\end{aligned}
+\]
+
+%For $\lambda = 0$, we interpret $-\lambda f^*(-c/\lambda)$ as its limit as $\lambda \to 0^+$, which equals $-\infty$ unless $f^*$ has special structure.
+
+%Equivalently, since $g(0) = -\infty$, we can write the dual as:
+%\[
+%\begin{aligned}
+%\text{maximize} \quad & -\lambda f^*(-c/\lambda) \\
+%\text{subject to} \quad & \lambda > 0
+%\end{aligned}
+%\]
+
+By definition, the conjugate $f^*$ is always convex. Then, the perspective function is defined as $g(x,t)=t f(x/t)$, with $t=-\eta, x=c$, and $f(\cdot)=f^*(\cdot)$, so the dual function is the perspective of $f^*$, and the perspective of a convex function is convex as well.
+
+%\textbf{Why the dual is convex.}
+
+%The dual problem is a convex optimization problem (maximizing a concave function) for the following reason:
+
+%The function $-g(\lambda) = \lambda f^*(-c/\lambda)$ for $\lambda > 0$ is the \textit{perspective} of the conjugate function $f^*$ evaluated at $-c/\lambda$.
+
+%Recall that:
+%\begin{itemize}
+%    \item The conjugate $f^*$ is \textbf{always convex}, regardless of whether $f$ is convex or not. This follows from the definition $f^*(y) = \sup_x(y^\top x - f(x))$, which is the pointwise supremum of affine functions in $y$.
+%    \item The perspective of a convex function is convex. Specifically, if $h(y)$ is convex, then $\lambda h(y/\lambda)$ is convex in $(\lambda, y)$ for $\lambda > 0$.
+%\end{itemize}
+
+%Therefore, $\lambda f^*(-c/\lambda)$ is convex in $\lambda$ for $\lambda > 0$, which means $g(\lambda) = -\lambda f^*(-c/\lambda)$ is \textbf{concave} in $\lambda$.
+
+%Maximizing a concave function (equivalently, minimizing a convex function) over a convex set is a convex optimization problem. Thus, the dual problem is convex, even though the primal problem may be nonconvex (since we did not assume $f$ is convex).
+

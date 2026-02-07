@@ -1,0 +1,74 @@
+\section*{A20.10 Energy storage trade-offs}
+
+\textbf{(a)} The optimal charging profile can be found by solving a linear program. The objective is to minimize total electricity cost $p^T(u+c)$, where $u+c$ is the net consumption from the grid. The constraints encode:
+\begin{itemize}
+    \item Battery dynamics: $q_{t+1} = q_t + c_t$ (energy stored increases by charge amount)
+    \item Cyclic operation: $q_1 = q_T + c_T$ (end with same charge as start)
+    \item Capacity limits: $0 \le q_t \le Q$
+    \item Rate limits: $-D \le c_t \le C$ (discharge/charge rates)
+    \item No grid export: $u_t + c_t \ge 0$ (can't pump power back)
+\end{itemize}
+This is an LP in variables $c, q \in \mathbb{R}^T$:
+\[
+\begin{aligned}
+\text{minimize} \quad & p^T(u + c) \\
+\text{subject to} \quad & q_{t+1} = q_t + c_t, \; t = 1, \ldots, T-1, \quad q_1 = q_T + c_T \\
+& 0 \leq q_t \leq Q, \quad -D \leq c_t \leq C, \quad u_t + c_t \geq 0
+\end{aligned}
+\]
+
+\textbf{(b) Results with $Q=35$, $C=D=3$:}
+\begin{center}
+\begin{tabular}{lr}
+Cost without battery & 459.69 \\
+Cost with battery & 379.41 \\
+Savings & 80.28 (17.5\%)
+\end{tabular}
+\end{center}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{img/a20_10_partb.png}
+    \caption{Usage, price, charging profile, and battery state of charge.}
+\end{figure}
+
+The battery charges when price is low and discharges when price is high.
+
+\textbf{(c) Trade-off curves:}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{img/a20_10_partc.png}
+    \caption{Cost vs storage capacity for different charge/discharge limits.}
+\end{figure}
+
+\textbf{Interpretation:}
+\begin{itemize}
+    \item At $Q=0$: No benefit, cost equals baseline (459.69)
+    \item Higher $C,D$ allows faster charge/discharge, achieving greater savings
+    \item Diminishing returns as $Q$ increases (curve flattens)
+\end{itemize}
+
+\subsection*{Code}
+\begin{verbatim}
+def solve_storage(Q, C, D):
+    c, q = cp.Variable(T), cp.Variable(T)
+    cons = [
+        q[1:] == q[:-1] + c[:-1],   # dynamics
+        q[0] == q[-1] + c[-1],       # cyclic
+        q >= 0, q <= Q,              # capacity
+        c >= -D, c <= C,             # charge/discharge rate
+        u.flatten() + c >= 0         # net consumption >= 0
+    ]
+    prob = cp.Problem(cp.Minimize(p.flatten() @ (u.flatten() + c)), cons)
+    prob.solve()
+    return prob.value
+
+# (b) With Q=35, C=D=3
+cost_with = solve_storage(35, 3, 3)
+cost_without = float(p.T @ u)
+
+# (c) Trade-off: vary Q
+costs = [solve_storage(Q, 3, 3) for Q in np.linspace(0, 100, 50)]
+\end{verbatim}
+

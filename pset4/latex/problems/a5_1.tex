@@ -1,0 +1,125 @@
+\section*{A5.1 Numerical perturbation analysis example}
+
+\subsubsection*{(a)}
+\textbf{Solving QP}
+
+\begin{itemize}
+    \item Optimal primal variables $x_1^* = -2.333333 \qquad x_2^* = 0.166667$
+    \item Optimal objectiva value $\lambda_1^* = 2.747741 \qquad \lambda_2^* = 2.885233 \qquad 0.040072$
+    \item Optimal objective value $p^* = 8.222222$
+\end{itemize}
+
+\textbf{Code:}
+\begin{verbatim}
+x = cp.Variable(2)
+x1, x2 = x[0], x[1]
+
+# Objective rewriten as (1/2)*x^T*P*x + q^T*x:
+P = np.array([[2, -1], [-1, 4]])
+q = np.array([-1, 0])
+objective = cp.Minimize(0.5 * cp.quad_form(x, P) + q @ x)
+
+constraints = [
+    x1 + 2*x2 <= u1,
+    x1 - 4*x2 <= u2,
+    5*x1 + 76*x2 <= 1
+]
+
+problem = cp.Problem(objective, constraints)
+p_star = problem.solve()
+
+lambda1 = constraints[0].dual_value
+lambda2 = constraints[1].dual_value
+lambda3 = constraints[2].dual_value
+\end{verbatim}
+
+\textbf{KKT verification:}
+
+KKT conditions hold, as seen in code output below:
+
+\begin{verbatim}
+1. Primal constraints (f_i <= 0):
+   f1 = x1 + 2*x2 - u1 = 4.440892e-16
+   f2 = x1 - 4*x2 - u2 = 0.000000e+00
+   f3 = 5*x1 + 76*x2 - 1 = 5.329071e-15
+2. Dual feasibility (lambda >= 0):
+   lambda1 = 2.747741
+   lambda2 = 2.885233
+   lambda3 = 0.040072
+3. Complementary slackness (lambda_i * f_i ~0):
+   lambda1 * f1 = 1.220242e-15
+   lambda2 * f2 = 0.000000e+00
+   lambda3 * f3 = 2.135451e-16
+4. Gradient ~0:
+   dL/dx1 = 1.887379e-15
+   dL/dx2 = 0.000000e+00
+\end{verbatim}
+
+\textbf{Code}
+\begin{verbatim}
+f1 = x1 + 2*x2 - u1
+f2 = x1 - 4*x2 - u2
+f3 = 5*x1 + 76*x2 - 1
+print(f"1. Primal constraints (f_i <= 0):")
+print(f"   f1 = x1 + 2*x2 - u1 = {f1:.6e}")
+print(f"   f2 = x1 - 4*x2 - u2 = {f2:.6e}")
+print(f"   f3 = 5*x1 + 76*x2 - 1 = {f3:.6e}")
+
+# 2. Dual constraints: lambda >= 0
+print(f"2. Dual feasibility (lambda >= 0):")
+print(f"   lambda1 = {l1:.6f}")
+print(f"   lambda2 = {l2:.6f}")
+print(f"   lambda3 = {l3:.6f}")
+
+# 3. Complementary slackness: lambda_i * f_i = 0
+cs1 = l1 * f1
+cs2 = l2 * f2
+cs3 = l3 * f3
+print(f"3. Complementary slackness (lambda_i * f_i ~0):")
+print(f"   lambda1 * f1 = {cs1:.6e}")
+print(f"   lambda2 * f2 = {cs2:.6e}")
+print(f"   lambda3 * f3 = {cs3:.6e}")
+
+# 4. Stationarity: gradient of Lagrangian w.r.t x = 0
+grad_x1 = 2*x1 - x2 - 1 + l1 + l2 + 5*l3
+grad_x2 = 4*x2 - x1 + 2*l1 - 4*l2 + 76*l3
+print(f"4. Gradient ~0:")
+print(f"   dL/dx1 = {grad_x1:.6e}")
+print(f"   dL/dx2 = {grad_x2:.6e}")
+\end{verbatim}
+
+\subsubsection*{(b) Sensitivity analysis}
+Sensitivity analysis using $p^\star_{\text{pred}} = p^\star - \lambda_1^\star \delta_1 - \lambda_2^\star \delta_2$:
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+\hline
+$\delta_1$ & $\delta_2$ & $p^\star_{\text{pred}}$ & $p^\star_{\text{exact}}$ \\
+\hline
+$0.0$  & $0.0$  & 8.2222 & 8.2222 \\
+$0.0$  & $-0.1$ & 8.5107 & 8.7064 \\
+$0.0$  & $0.1$  & 7.9337 & 7.9800 \\
+$-0.1$ & $0.0$  & 8.4970 & 8.5650 \\
+$-0.1$ & $-0.1$ & 8.7855 & 8.8156 \\
+$-0.1$ & $0.1$  & 8.2085 & 8.3189 \\
+$0.1$  & $0.0$  & 7.9474 & 8.2222 \\
+$0.1$  & $-0.1$ & 8.2360 & 8.7064 \\
+$0.1$  & $0.1$  & 7.6589 & 7.7515 \\
+\hline
+\end{tabular}
+\end{center}
+
+$p^*_\text{pred} \leq p^*_\text{exact}$ holds in every case.
+
+\textbf{Code}
+\begin{verbatim}
+deltas = [-0.1, 0, 0.1]
+for d1 in deltas:
+    for d2 in deltas:
+        u1_pert = u1_base + d1
+        u2_pert = u2_base + d2
+        sol_pert = solve_qp(u1_pert, u2_pert)
+        p_exact = sol_pert['p_star']
+        p_pred = sol_base['p_star'] - sol_base['lambda1']*d1 - sol_base['lambda2']*d2
+        inequality_holds = p_pred <= p_exact + 1e-6  # small tolerance
+\end{verbatim}

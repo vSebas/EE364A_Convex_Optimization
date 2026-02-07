@@ -1,0 +1,50 @@
+\section*{A17.5 Simple portfolio optimization}
+
+\textbf{(a) Minimum-risk portfolios} with same expected return as uniform portfolio ($= 0.0729$):%($\bar{p}^T x_{\text{unif}} = 0.0729$):
+
+\begin{center}
+\begin{tabular}{lcc}
+\hline
+Portfolio & Std Dev & Risk Reduction \\
+\hline
+Uniform $(x = \mathbf{1}/n)$ & 0.0666 & -- \\
+No constraints & 0.0090 & 86.4\% \\
+Long-only $(x \geq 0)$ & 0.0395 & 40.7\% \\
+Short limit $(\mathbf{1}^T x_- \leq 0.5)$ & 0.0150 & 77.5\% \\
+\hline
+\end{tabular}
+\end{center}
+
+The unconstrained portfolio achieves the lowest risk by taking short positions. The long-only constraint is most restrictive. Allowing limited shorting (0.5) significantly reduces risk compared to long-only.
+
+\textbf{(b) Efficient frontier:}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{img/a17_5_frontier.png}
+    \caption{Risk-return trade-off curves for long-only and short-limited portfolios.}
+\end{figure}
+
+The short-limited portfolio dominates the long-only portfolio (lower risk for same return). Both curves pass through lower-risk regions than the uniform portfolio.
+
+\subsection*{Code}
+\begin{verbatim}
+# (a) Minimum-variance portfolio with target return
+def min_var(r_target, long_only=False, short_limit=None):
+    x = cp.Variable(n)
+    cons = [cp.sum(x) == 1, pbar.flatten() @ x == r_target]
+    if long_only: cons.append(x >= 0)
+    if short_limit: cons.append(cp.sum(cp.neg(x)) <= short_limit)
+    cp.Problem(cp.Minimize(cp.quad_form(x, S)), cons).solve()
+    return x.value, np.sqrt(x.value @ S @ x.value)
+
+_, std_long = min_var(r_unif, long_only=True)
+_, std_short = min_var(r_unif, short_limit=0.5)
+
+# (b) Efficient frontier
+r_min, r_max = min(pbar), max(pbar)  # return range for long-only
+returns = np.linspace(r_min, r_max, 50)
+stds = [min_var(r, long_only=True)[1] for r in returns]
+plt.plot(stds, returns)
+\end{verbatim}
+

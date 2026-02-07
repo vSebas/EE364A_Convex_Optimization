@@ -1,0 +1,39 @@
+\section*{A5.3 Relative entropy}
+
+The Lagrangian is
+\[
+L(x,\nu_1,\nu_2)
+=\sum_{k=1}^n x_k \log\!\left(\frac{x_k}{y_k}\right)
++\nu_1^T(b-Ax)+\nu_2(1-\mathbf{1}^T x).
+\]
+
+Differentiating with respect to $x_k$ gives
+\[
+\frac{\partial L}{\partial x_k}
+=\log\!\left(\frac{x_k}{y_k}\right)+1-a_k^T\nu_1-\nu_2=0,
+\]
+so
+\[
+x_k = y_k \exp(a_k^T\nu_1+\nu_2-1).
+\]
+
+Using $\sum_{k=1}^n x_k=1$,
+\[
+e^{\nu_2-1}
+=\frac{1}{\sum_{k=1}^n y_k e^{a_k^T\nu_1}}.
+\]
+
+Substituting back yields the dual function
+\[
+g(\nu_1)
+= b^T\nu_1
+- \log\!\left(\sum_{k=1}^n y_k e^{a_k^T\nu_1}\right),
+\]
+and the dual problem
+\[
+%\boxed{
+\text{maximize}\quad 
+b^T\nu_1
+- \log\!\left(\sum_{k=1}^n y_k e^{a_k^T\nu_1}\right).
+%}
+\]

@@ -1,0 +1,328 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{geometry}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{xcolor}
+\usepackage{subcaption}
+\geometry{margin=1in}
+
+\pagestyle{fancy}
+\fancyhf{} % clear default header/footer
+
+\fancyhead[L]{EE 364A}
+\fancyhead[C]{Victor Sebastian Martinez Perez}
+\fancyhead[R]{Problem Set 1}
+
+\renewcommand{\headrulewidth}{0.4pt} % underline thickness
+\renewcommand{\footrulewidth}{0pt}   % no footer line
+
+\begin{document}
+
+\section*{2.7 Voronoi description of a halfspace}
+
+\begin{align*}
+\|x-a\|_2^2 &\leq \|x-b\|_2^2 \\
+(x-a)^T(x-a) &\leq (x-b)^T(x-b) \\
+x^Tx - 2a^Tx + a^Ta &\leq x^Tx - 2b^Tx + b^Tb \\
+2(b-a)^T x &\leq b^Tb - a^Ta
+\end{align*}
+
+Thus the set can be written as the halfspace, shown in Fig. \ref{fig:2.7}
+\[
+\{x \mid c^T x \le d\}
+\quad \text{with} \quad
+c = 2(b-a), \quad d = b^Tb - a^Ta.
+\]
+
+\begin{figure} [h]
+    \centering
+    \includegraphics[width=0.4\linewidth]{imagen.png}
+    \caption{Halfspace describing $c^T x \le d$}
+    \label{fig:2.7}
+\end{figure}
+
+\section*{2.12 Which of the following sets are convex?}
+
+\subsection*{(a) Slab \hfill \textbf{\textcolor{red}{(Convex)}}}
+\[
+S = \{x \in \mathbb{R}^n \mid \alpha \le a^T x \le \beta\}
+\]
+
+\subsubsection*{Line-segment}
+Let $x_1, x_2 \in S$ and $\theta \in [0,1]$. Define
+\[
+x_\theta = \theta x_1 + (1-\theta)x_2.
+\]
+Then
+\[
+a^T x_\theta = \theta a^T x_1 + (1-\theta)a^T x_2.
+\]
+Since $\alpha \le a^T x_1 \le \beta$ and $\alpha \le a^T x_2 \le \beta$,
+\[
+\alpha \le a^T x_\theta \le \beta,
+\]
+so $x_\theta \in S$. Hence $S$ is convex.
+
+\subsubsection*{Intersection of halfspaces}
+Alternatively,
+\[
+S = \{x \mid a^T x \le \beta\} \cap \{x \mid -a^T x \le -\alpha\},
+\]
+which is an intersection of two halfspaces, hence convex.
+
+\subsection*{(b) Rectangle \hfill \textbf{\textcolor{red}{(Convex)}}}
+\[
+R = \{x \in \mathbb{R}^n \mid \alpha_i \le x_i \le \beta_i,\ i=1,\dots,n\}
+\]
+
+\subsubsection*{Line-segment}
+Let $x_1, x_2 \in R$ and $\theta \in [0,1]$. Define
+\[
+x_\theta = \theta x_1 + (1-\theta)x_2.
+\]
+For each coordinate $i$,
+\[
+x_{\theta,i} = \theta x_{1,i} + (1-\theta)x_{2,i}.
+\]
+Since $\alpha_i \le x_{1,i} \le \beta_i$ and $\alpha_i \le x_{2,i} \le \beta_i$,
+\[
+\alpha_i \le x_{\theta,i} \le \beta_i,
+\]
+So each $x_{\theta,i} \in R$. Hence $R$ is convex.
+
+\subsection*{(c) Wedge \hfill \textbf{\textcolor{red}{(Convex)}}}
+\[
+W = \{x \in \mathbb{R}^n \mid a_1^T x \le b_1,\ a_2^T x \le b_2\}
+\]
+
+\subsubsection*{Intersection of halfspaces}
+Each inequality defines a halfspace. Since
+\[
+W = \{x \mid a_1^T x \le b_1\} \cap \{x \mid a_2^T x \le b_2\},
+\]
+$W$ is convex.
+
+\subsection*{(d) Points closer to a fixed point than to a set \hfill \textbf{\textcolor{red}{(Convex)}}}
+\[
+Z = \{x \mid \|x - x_0\|_2 \le \|x - y\|_2 \ \forall y \in S\}.
+\]
+For a fixed $y \in S$,
+\begin{align*}
+\|x - x_0\|_2^2 &\le \|x - y\|_2^2 \\
+(x-x_0)^T(x-x_0) &\le (x-y)^T(x-y) \\
+-2x_0^Tx + x_0^Tx_0 &\le -2y^Tx + y^T y \\
+2(y-x_0)^T x &\le y^T y - x_0^T x_0.
+\end{align*}
+Each inequality defines a halfspace. Since
+\[
+Z = \bigcap_{y \in S} \{x \mid 2(y-x_0)^T x \le y^T y - x_0^T x_0\},
+\]
+$Z$ is an intersection of halfspaces, hence convex.
+
+\section*{2.15 Sets of probability distributions}
+
+\subsection*{(a) $\alpha \le \mathbb{E}[f(x)] \le \beta$ \hfill \textbf{\textcolor{red}{(Convex)}}}
+
+\[
+\mathbb{E}[f(x)] = \sum_{i=1}^n p_i f(a_i) = c^T p,
+\]
+where $c = [f(a_1), \dots, f(a_n)]^T$. Thus,
+\[
+\alpha \le c^T p \le \beta
+\]
+defines a slab, i.e., the intersection of two halfspaces, which is convex.
+
+The feasible set
+\[
+\{p \mid \alpha \le \mathbb{E}[f(x)] \le \beta,\ \mathbf{1}^T p = 1,\ p \succeq 0\}
+\]
+is the intersection of this slab, the probability simplex hyperplane, and the nonnegative orthant. Since each set is convex, their intersection is convex.
+
+\subsection*{(b) $\textbf{prob}(x > a) \le \beta$ \hfill \textbf{\textcolor{red}{(Convex)}}}
+
+\[
+\textbf{prob}(x > a) = \sum_{i : a_i \ge a} p_i = c^T p,
+\]
+
+where $c \in \mathbb{R}^n$ is defined componentwise by
+\[
+c_i =
+\begin{cases}
+1, & a_i \ge a,\\
+0, & a_i < a.
+\end{cases}
+\]
+
+So, the constraint $\textbf{prob}(x > a) \le \beta$ defines a halfspace. And the intersection of the halfspace with the probability simplex $P$ is also convex.
+
+\subsection*{(c) $\mathbb{E}|x^3| \le \alpha \mathbb{E}|x|$ \hfill \textbf{\textcolor{red}{(Convex)}}}
+
+\begin{align*}
+    \mathbb{E}|x^3| - \alpha \mathbb{E}|x| &\le 0 \\
+    \sum_i (|a_i^3| p_i - \alpha |a_i|p_i) &\le 0 \\
+    \sum_i (|a_i^3| - \alpha |a_i|) p_i &\le 0 \\
+    c^Tp &\le 0 
+\end{align*}
+
+where the elements of $c$ are $c_i = |a_i|^3 - \alpha|a_i|$, which is a halfspace in p. Intersecting with the probability simplex preserves convexity.
+
+\subsection*{(d) $\mathbb{E}[x^2] \le \alpha$ \hfill \textbf{\textcolor{red}{(Convex)}}}
+
+\[
+\mathbb{E}[x^2] = \sum_{i=1}^n a_i^2 p_i = c^T p,
+\]
+where $c = [a_1^2,\dots,a_n^2]^T$. Thus the constraint is $c^T p \le \alpha$, defining a halfspace in $p$. Intersecting with the probability simplex preserves convexity.
+
+\subsection*{(e) $\mathbb{E}[x^2] \ge \alpha$ \hfill \textbf{\textcolor{red}{(Convex)}}}
+
+\[
+\mathbb{E}[x^2] = \sum_{i=1}^n a_i^2 p_i = c^T p,
+\]
+
+so the constraint is $-c^T p \le -\alpha$, which is also a halfspace (the other side of the hyperplane). Intersecting with the probability simplex preserves convexity.
+
+
+\subsection*{(f) $\mathrm{Var}(x) \le \alpha$ \hfill \textbf{\textcolor{red}{(Non-convex)}}}
+
+\[
+\mathrm{Var}(x) = \mathbb{E}[x^2] - (\mathbb{E}[x])^2
+= s^T p - (a^T p)^2.
+\]
+
+where $s=[a_1^2,\dots,a_n^2]^T$ and $a=[a_1,\dots,a_n]^T$. So, the constraint becomes $s^T p - (a^T p)^2 \le \alpha$, composed of a linear minus a convex term, hence concave.
+
+Example: Let $x \in \{-1,1\}$.
+\begin{align*}
+    p_1 &= (1,0), \quad \text{var}_1=1-(-1)^2=0 \qquad (\text{always} \quad x=-1) \\
+    p_2 &= (0,1), \quad \text{var}_2=1-(1)^2=0 \qquad (\text{always} \quad x=1)
+\end{align*}
+
+Their midpoint
+\[
+p_3 = (1/2,1/2)
+\]
+has variance $1$, violating convexity.
+
+\subsection*{(g) $\mathrm{Var}(x) \ge \alpha$ \hfill \textbf{\textcolor{red}{(Convex)}}}
+
+\begin{align*}
+\mathrm{Var}(x) &= \mathbb{E}[x^2] - (\mathbb{E}[x])^2 = s^T p - (a^T p)^2 \\
+&= s^T p - (a^T p)(a^T p) = s^T p - p^T (aa^T) p \\
+&= s^T p - p^T Ap \ge \alpha
+\end{align*}
+
+Let $A = aa^T \succeq 0$. Since $(a^T p)^2 = p^T A p$, the constraint becomes
+\[
+p^T A p - s^T p + \alpha \le 0
+\]
+
+Since $A \succeq 0$, $p^T A p - s^T p + \alpha \le 0$ is convex, and the set, and the intersection with the probability simplex preserves convexity.
+
+\section*{A1.1 Convex Optimization}
+
+\begin{itemize}
+\item (a) True
+\item (b) True
+\item (c) True
+\item (d) True
+\end{itemize}
+
+\section*{A1.2 Device Sizing}
+
+\begin{itemize}
+\item (a) False
+\item (b) True
+\item (c) True
+\end{itemize}
+
+\section*{A1.4 Local Optimization}
+
+\begin{itemize}
+\item (a) True
+\item (b) False
+\item (c) False
+\end{itemize}
+
+\section*{A2.5 Convex and conic hull}
+
+\begin{itemize}
+\item (a) True
+\[
+(0,-1/3)= \frac{1}{3}(1,0)+0(1,1)+\frac{1}{3}(-1,-1)+\frac{1}{3}(0,0)
+\]
+and $\frac{1}{3}+\frac{1}{3}+\frac{1}{3}+0=1$ and non-negative.
+\item (b) False
+\[
+(0,1/3)= -\frac{1}{3}(1,0)+0(1,1)-\frac{1}{3}(-1,-1)+\frac{1}{3}(0,0)
+\]
+but coefficients are negative.
+So, $(0,1/3)$ requires negative weights, hence it is not in the convex hull of C.
+\item (c) False. (0,1/3) is not in the conic hull of C
+\begin{figure} [h]
+    \centering
+    \includegraphics[width=0.25\linewidth]{conic_hull.png}
+    \caption{Conic hull}
+    \label{fig:conic_hull}
+\end{figure}
+\end{itemize}
+
+\section*{A2.8 Convexity of some sets}
+
+\begin{itemize}
+\item (a) Convex. Fig. \ref{fig:a}
+\item (b) Convex. Fig. \ref{fig:b}
+\item (c) Nonconvex. Fig. \ref{fig:c}
+\item (d) Convex. Fig. \ref{fig:d}
+\end{itemize}
+
+\begin{figure*}[t!]
+    \centering
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        \includegraphics[width=0.5\linewidth]{A2_8a.jpg}
+        \caption{$\{(x, y) \in \mathbb{R}^2_{++} \mid x/y \le 1\}$}
+        \label{fig:a}
+    \end{subfigure}%
+    ~
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        \includegraphics[width=0.5\linewidth]{A2_8b.jpg}
+        \caption{$\{(x, y) \in \mathbb{R}^2_{++} \mid x/y \ge 1\}$}
+        \label{fig:b}
+    \end{subfigure}
+
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        \includegraphics[width=0.5\linewidth]{A2_8c.jpg}
+        \caption{$\{(x, y) \in \mathbb{R}^2_{+} \mid xy \le 1\}$}
+        \label{fig:c}
+    \end{subfigure}%
+    ~
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        \includegraphics[width=0.5\linewidth]{A2_8d.jpg}
+        \caption{$\{(x, y) \in \mathbb{R}^2_{+} \mid xy \ge 1\}$}
+        \label{fig:d}
+    \end{subfigure}
+    
+    \caption{Sets}
+    \label{fig:a2_8_sets}
+\end{figure*}
+
+\section*{A2.9 Square and disk}
+\begin{figure} [h]
+    \centering
+    \includegraphics[width=0.25\linewidth]{a29.png}
+    \label{fig:a29}
+\end{figure}
+
+\begin{itemize}
+\item (a) $S \cap D$ is convex.
+\item (b) $S \cup D$ is convex.
+\item (c) $S \setminus D$ is not convex.
+\end{itemize}
+
+\end{document}
