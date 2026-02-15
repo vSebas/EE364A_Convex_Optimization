@@ -1,0 +1,64 @@
+\section*{A16.11 Control with various objectives}
+
+We consider a discrete-time linear dynamical system:
+\[
+x_{t+1} = Ax_t + Bu_t, \quad t = 0, 1, \ldots, T-1
+\]
+with state $x_t \in \mathbf{R}^n$ and control input $u_t \in \mathbf{R}^m$. We are given initial state $x_0 = x^{\text{init}}$ and require $x_T = 0$.
+
+\textbf{Problem data:} $n = 4$, $m = 2$, $T = 100$, with $A$, $B$, and $x^{\text{init}}$ from \texttt{various\_obj\_regulator\_data.py}.
+
+We solve four optimization problems with different objectives measuring the control effort:
+
+\begin{enumerate}[(a)]
+\item \textbf{Sum of squares of 2-norms:} $\sum_{t=0}^{T-1} \|u_t\|_2^2$
+
+This is the traditional LQR objective (with $R = I$, $Q = 0$). It penalizes large control inputs quadratically.
+
+\item \textbf{Sum of 2-norms:} $\sum_{t=0}^{T-1} \|u_t\|_2$
+
+This promotes \emph{group sparsity} --- entire time steps where $u_t = 0$.
+
+\item \textbf{Max of 2-norms:} $\max_{t=0,\ldots,T-1} \|u_t\|_2$
+
+This minimizes the peak control effort, spreading the control action evenly across time.
+
+\item \textbf{Sum of 1-norms:} $\sum_{t=0}^{T-1} \|u_t\|_1$
+
+This approximates fuel use in some applications and promotes \emph{element-wise sparsity}.
+\end{enumerate}
+
+\textbf{Results:}
+
+\begin{center}
+\begin{tabular}{l|c}
+Objective & Optimal value \\
+\hline
+(a) Sum of squares of 2-norms & $0.8595$ \\
+(b) Sum of 2-norms & $5.9969$ \\
+(c) Max of 2-norms & $0.1105$ \\
+(d) Sum of 1-norms & $7.0443$ \\
+\end{tabular}
+\end{center}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{img/a16_11_controls.png}
+\caption{Optimal control inputs for each objective. Blue and red show the two components $u_1, u_2$; black dashed shows $\|u_t\|_2$.}
+\end{figure}
+
+\textbf{Comments:}
+
+\begin{itemize}
+\item \textbf{(a) Sum of squares:} The control is smooth and spreads effort across all time steps. This is expected since the quadratic penalty discourages large deviations.
+
+\item \textbf{(b) Sum of 2-norms:} We observe many time steps where $u_t \approx 0$ (group sparsity). The control acts in bursts, with most effort at the beginning and end.
+
+\item \textbf{(c) Max of 2-norms:} The control is spread very evenly, with $\|u_t\|_2 \approx 0.11$ for most $t$. This ``equioscillation'' behavior is characteristic of $\ell_\infty$-type objectives.
+
+\item \textbf{(d) Sum of 1-norms:} Many individual components are zero (element-wise sparsity). The control tends to use one actuator at a time rather than both simultaneously.
+\end{itemize}
+
+\textbf{Python code:}
+\lstinputlisting[language=Python, basicstyle=\ttfamily\footnotesize]{../code/a16_11.py}
+

@@ -1,0 +1,5 @@
+From bv_cvxbook.pdf:
+5.13, 6.9, 
+
+From additional_exercises.pdf:
+A5.37, A6.2, A6.27 OR A6.28, A16.11, A17.18, A20.14

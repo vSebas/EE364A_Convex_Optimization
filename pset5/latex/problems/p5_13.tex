@@ -1,0 +1,161 @@
+\section*{5.13 Lagrangian relaxation of Boolean LP}
+
+A \emph{Boolean linear program} is an optimization problem of the form
+\[
+\begin{aligned}
+\text{minimize} \quad & c^T x \\
+\text{subject to} \quad & Ax \preceq b \\
+& x_i \in \{0, 1\}, \quad i = 1, \ldots, n,
+\end{aligned}
+\]
+which is, in general, very difficult to solve. The \emph{LP relaxation} of this problem is
+\[
+\begin{aligned}
+\text{minimize} \quad & c^T x \\
+\text{subject to} \quad & Ax \preceq b \\
+& 0 \leq x_i \leq 1, \quad i = 1, \ldots, n,
+\end{aligned}
+\tag{5.107}
+\]
+which gives a lower bound on the optimal value of the Boolean LP.
+
+\begin{enumerate}[(a)]
+\item \textbf{Lagrangian relaxation.} The Boolean LP can be reformulated as the problem
+\[
+\begin{aligned}
+\text{minimize} \quad & c^T x \\
+\text{subject to} \quad & Ax \preceq b \\
+& x_i(1 - x_i) = 0, \quad i = 1, \ldots, n,
+\end{aligned}
+\]
+which has quadratic equality constraints. Find the Lagrange dual of this problem.
+
+\item Show that the lower bound obtained via Lagrangian relaxation, and via the LP relaxation (5.107), are the same.
+\end{enumerate}
+
+\textbf{Solution.}
+
+\subsection*{(a) Deriving the Lagrange dual}
+
+\paragraph{Step 1: Form the Lagrangian.}
+With $\lambda \succeq 0$ for the inequality constraints and $\nu \in \mathbf{R}^n$ for the equality constraints:
+\[
+\begin{aligned}
+L(x,\lambda,\nu)
+&= c^T x + \lambda^T(Ax-b) + \sum_{i=1}^n \nu_i x_i(1-x_i) \\
+&= c^T x + \lambda^T A x - \lambda^T b + \sum_{i=1}^n \nu_i x_i - \sum_{i=1}^n \nu_i x_i^2 \\
+&= (c + A^T\lambda + \nu)^T x - \sum_{i=1}^n \nu_i x_i^2 - \lambda^T b
+\end{aligned}
+\]
+
+\paragraph{Step 2: Compute the dual function.}
+The dual function is
+\[
+g(\lambda,\nu) = \inf_{x \in \mathbf{R}^n} L(x,\lambda,\nu).
+\]
+Since the Lagrangian separates across components of $x$:
+\[
+g(\lambda,\nu) = -\lambda^T b + \sum_{i=1}^n \inf_{x_i \in \mathbf{R}} \underbrace{\left[ (c_i + (A^T\lambda)_i + \nu_i)x_i - \nu_i x_i^2 \right]}_{\ell_i(x_i)}
+\]
+
+\paragraph{Step 3: Compute $\inf_{x_i} \ell_i(x_i)$ for each component.}
+
+Define $\ell_i(x_i) = (c_i + (A^T\lambda)_i + \nu_i)x_i - \nu_i x_i^2$. This is a quadratic in $x_i$.
+
+\textbf{Case 1: $\nu_i > 0$.}
+The coefficient of $x_i^2$ is $-\nu_i < 0$, so $\ell_i$ is concave (opens downward):
+\[
+\inf_{x_i \in \mathbf{R}} \ell_i(x_i) = -\infty.
+\]
+
+\textbf{Case 2: $\nu_i = 0$.}
+Then $\ell_i(x_i) = (c_i + (A^T\lambda)_i)x_i$ is linear:
+\[
+\inf_{x_i \in \mathbf{R}} \ell_i(x_i) = -\infty \quad \text{(unless } c_i + (A^T\lambda)_i = 0\text{)}.
+\]
+
+\textbf{Case 3: $\nu_i < 0$.}
+The coefficient of $x_i^2$ is $-\nu_i > 0$, so $\ell_i$ is convex (opens upward).
+
+Let $\mu_i = -\nu_i > 0$. Then:
+\[
+\ell_i(x_i) = (c_i + (A^T\lambda)_i - \mu_i)x_i + \mu_i x_i^2
+\]
+
+To find the minimum, take the derivative and set to zero:
+\[
+\frac{d\ell_i}{dx_i} = (c_i + (A^T\lambda)_i - \mu_i) + 2\mu_i x_i = 0
+\]
+\[
+\Rightarrow \quad x_i^\star = -\frac{c_i + (A^T\lambda)_i - \mu_i}{2\mu_i}
+\]
+
+Substituting back to find the minimum value:
+\[
+\begin{aligned}
+\inf_{x_i} \ell_i(x_i) &= \ell_i(x_i^\star) \\
+&= (c_i + (A^T\lambda)_i - \mu_i) \cdot \left(-\frac{c_i + (A^T\lambda)_i - \mu_i}{2\mu_i}\right) + \mu_i \left(-\frac{c_i + (A^T\lambda)_i - \mu_i}{2\mu_i}\right)^2 \\
+&= -\frac{(c_i + (A^T\lambda)_i - \mu_i)^2}{2\mu_i} + \frac{(c_i + (A^T\lambda)_i - \mu_i)^2}{4\mu_i} \\
+&= -\frac{(c_i + (A^T\lambda)_i - \mu_i)^2}{4\mu_i}
+\end{aligned}
+\]
+
+\paragraph{Step 4: Assemble the dual function.}
+For the dual function to be finite, we need $\nu_i < 0$ for all $i$. Using $\mu = -\nu \succ 0$:
+\[
+g(\lambda,\mu) = -\lambda^T b - \sum_{i=1}^n \frac{(c_i + (A^T\lambda)_i - \mu_i)^2}{4\mu_i}
+\]
+
+\paragraph{Step 5: Write the Lagrange dual problem.}
+\[
+\boxed{
+\begin{aligned}
+\text{maximize} \quad & -\lambda^T b - \sum_{i=1}^n \frac{(c_i + (A^T\lambda)_i - \mu_i)^2}{4\mu_i} \\
+\text{subject to} \quad & \lambda \succeq 0, \quad \mu \succ 0
+\end{aligned}
+}
+\]
+
+\subsection*{(b) Equivalence with LP relaxation}
+
+The dual of the LP relaxation (5.107) is:
+\[
+\begin{aligned}
+\text{maximize} \quad & -b^T\lambda - \mathbf{1}^T\mu \\
+\text{subject to} \quad & c + A^T\lambda + \mu \succeq 0, \quad \lambda \succeq 0, \quad \mu \succeq 0
+\end{aligned}
+\]
+
+To show equivalence, we optimize the Lagrangian dual over $\mu_i$ for fixed $\lambda$. Let $a_i = c_i + (A^T\lambda)_i$. We compute:
+\[
+\sup_{\mu_i > 0} \left( -\frac{(a_i - \mu_i)^2}{4\mu_i} \right)
+\]
+
+Taking the derivative with respect to $\mu_i$ and setting to zero:
+\[
+\frac{d}{d\mu_i}\left( -\frac{(a_i - \mu_i)^2}{4\mu_i} \right) = -\frac{2(a_i-\mu_i)(-1) \cdot 4\mu_i - (a_i-\mu_i)^2 \cdot 4}{16\mu_i^2} = \frac{a_i^2 - \mu_i^2}{4\mu_i^2} = 0
+\]
+This gives $\mu_i^\star = |a_i|$ (taking positive root since $\mu_i > 0$).
+
+Evaluating:
+\[
+\sup_{\mu_i > 0} \left( -\frac{(a_i - \mu_i)^2}{4\mu_i} \right) = \begin{cases}
+0 & \text{if } a_i \geq 0 \\
+a_i & \text{if } a_i < 0
+\end{cases} = \min(0, a_i)
+\]
+
+Summing over all $i$:
+\[
+\sup_{\mu \succ 0} g(\lambda, \mu) = -\lambda^T b + \sum_{i=1}^n \min(0, c_i + (A^T\lambda)_i)
+\]
+
+This matches the LP relaxation dual objective $-b^T\lambda - \mathbf{1}^T\mu$ when we set $\mu_i = \max(0, -(c_i + (A^T\lambda)_i))$ to satisfy $c + A^T\lambda + \mu \succeq 0$.
+
+Therefore:
+\[
+\boxed{d^\star_{\text{Lagrangian}} = d^\star_{\text{LP relaxation}}}
+\]
+
+The LP relaxation provides the same lower bound on the Boolean LP as the Lagrangian relaxation approach.
+

@@ -1,0 +1,82 @@
+\section*{A5.37 Properties under Slater's condition}
+
+Consider a convex optimization problem
+\[
+\begin{aligned}
+\text{minimize} \quad & f_0(x) \\
+\text{subject to} \quad & f_i(x) \leq 0, \quad i = 1, \ldots, m \\
+& Ax = b,
+\end{aligned}
+\]
+with variable $x \in \mathbf{R}^n$, that satisfies Slater's constraint qualification. Determine whether each of the statements below is true or false. True means it holds with no further assumptions.
+
+\textbf{(a) The primal and dual problems have the same objective value.}
+
+\textbf{True.}
+
+Slater's constraint qualification states that there exists a point $\tilde{x}$ in the relative interior of the domain such that:
+\begin{itemize}
+    \item $f_i(\tilde{x}) < 0$ for all $i = 1, \ldots, m$ (strict inequality for inequality constraints)
+    \item $A\tilde{x} = b$
+\end{itemize}
+
+For convex optimization problems, \textbf{Slater's condition implies strong duality}. Therefore:
+\[
+p^\star = d^\star
+\]
+
+The primal and dual optimal values are equal.
+
+\textbf{(b) The primal problem has a unique solution.}
+
+\textbf{False.}
+
+Slater's condition guarantees strong duality, but it does \emph{not} guarantee uniqueness of the primal solution.
+
+\textbf{Counterexample:} Consider the LP
+\[
+\begin{aligned}
+\text{minimize} \quad & x_1 \\
+\text{subject to} \quad & x_1 + x_2 \leq 2 \\
+& x_1 \geq 0, \; x_2 \geq 0
+\end{aligned}
+\]
+
+This is convex and satisfies Slater's condition (e.g., $\tilde{x} = (0.5, 0.5)$ is strictly feasible). However, the optimal value is $p^\star = 0$, achieved by \emph{any} point of the form $(0, t)$ where $0 \leq t \leq 2$. The solution is not unique.
+
+\textbf{(c) The dual problem is not unbounded.}
+
+\textbf{True.}
+
+For a convex optimization problem satisfying Slater's condition:
+\begin{itemize}
+    \item The primal problem is feasible (Slater's condition provides a feasible point).
+    \item By weak duality, $d^\star \leq p^\star$.
+\end{itemize}
+
+The dual problem is a \emph{maximization} problem:
+\[
+\text{maximize} \quad g(\lambda, \nu) \quad \text{subject to} \quad \lambda \succeq 0
+\]
+
+Since $g(\lambda, \nu) \leq p^\star$ for all dual feasible $(\lambda, \nu)$, the dual objective is \textbf{bounded above} by $p^\star$.
+
+Therefore, the dual problem cannot be unbounded (i.e., $d^\star \neq +\infty$).
+
+\textbf{(d) Suppose $x^\star$ is optimal, with $f_1(x^\star) = -0.2$. Then for every dual optimal point $(\lambda^\star, \nu^\star)$, we have $\lambda_1^\star = 0$.}
+
+\textbf{True.}
+
+This follows from \textbf{complementary slackness}. Under Slater's condition, strong duality holds, and the KKT conditions are necessary and sufficient for optimality. One of the KKT conditions is:
+\[
+\lambda_i^\star f_i(x^\star) = 0, \quad i = 1, \ldots, m
+\]
+
+For $i = 1$: Since $f_1(x^\star) = -0.2 \neq 0$, we must have:
+\[
+\lambda_1^\star \cdot (-0.2) = 0 \quad \Longrightarrow \quad \lambda_1^\star = 0
+\]
+
+Intuitively, $f_1(x^\star) = -0.2 < 0$ means the first inequality constraint is \textbf{inactive} (strictly satisfied) at the optimal point. By complementary slackness, the corresponding dual variable must be zero.
+
+This holds for \emph{every} dual optimal point $(\lambda^\star, \nu^\star)$.

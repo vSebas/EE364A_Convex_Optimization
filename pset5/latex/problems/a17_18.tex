@@ -1,0 +1,81 @@
+\section*{A17.18 Option price bounds}
+
+We use arbitrage-free pricing to find bounds on the price of a collar option.
+
+\textbf{Setup:}
+\begin{itemize}
+    \item Risk-free asset with payoff $r = 1.05$ in every scenario, price $= 1$
+    \item Underlying stock with current price $S_0 = 1$
+    \item $m = 200$ scenarios with $S^{(i)}$ uniformly spaced from $0.5$ to $2$
+    \item Call options: $K = 1.1$ (price $0.06$), $K = 1.2$ (price $0.03$)
+    \item Put options: $K = 0.8$ (price $0.02$), $K = 0.7$ (price $0.01$)
+    \item Collar with floor $F = 0.9$ and cap $C = 1.15$ (price unknown)
+\end{itemize}
+
+\textbf{Arbitrage-free pricing framework:}
+
+A state-price vector $\pi \in \mathbf{R}^m$ satisfies $\pi \succeq 0$ and gives the ``price'' of each scenario. For a portfolio to be arbitrage-free, there must exist such a $\pi$ where the price of each asset equals $\pi^T v$, where $v$ is the vector of payoffs.
+
+Let $V \in \mathbf{R}^{m \times n}$ be the payoff matrix where $V_{ij}$ is the payoff of asset $j$ in scenario $i$. The arbitrage-free condition requires:
+\[
+V^T \pi = p
+\]
+where $p$ is the vector of known asset prices.
+
+\textbf{Assets and payoffs:}
+
+For scenario $i$ with stock price $S^{(i)}$:
+\begin{enumerate}
+    \item Risk-free: payoff $= 1.05$
+    \item Stock: payoff $= S^{(i)}$
+    \item Call $K=1.1$: payoff $= \max(0, S^{(i)} - 1.1)$
+    \item Call $K=1.2$: payoff $= \max(0, S^{(i)} - 1.2)$
+    \item Put $K=0.8$: payoff $= \max(0, 0.8 - S^{(i)})$
+    \item Put $K=0.7$: payoff $= \max(0, 0.7 - S^{(i)})$
+    \item Collar $F=0.9$, $C=1.15$: payoff $= \min(C, \max(F, S^{(i)}))$
+\end{enumerate}
+
+\textbf{Finding price bounds:}
+
+To find the range of arbitrage-free prices for the collar, we solve two LPs:
+
+\textbf{Lower bound:}
+\[
+\begin{aligned}
+\text{minimize} \quad & v_{\text{collar}}^T \pi \\
+\text{subject to} \quad & V_{\text{known}}^T \pi = p_{\text{known}} \\
+& \pi \succeq 0
+\end{aligned}
+\]
+
+\textbf{Upper bound:}
+\[
+\begin{aligned}
+\text{maximize} \quad & v_{\text{collar}}^T \pi \\
+\text{subject to} \quad & V_{\text{known}}^T \pi = p_{\text{known}} \\
+& \pi \succeq 0
+\end{aligned}
+\]
+
+\textbf{Results:}
+
+\begin{center}
+\begin{tabular}{l|c}
+Quantity & Value \\
+\hline
+Lower bound on collar price & $0.9850$ \\
+Upper bound on collar price & $1.0173$ \\
+\end{tabular}
+\end{center}
+
+The arbitrage-free price range for the collar with $F = 0.9$ and $C = 1.15$ is:
+\[
+\boxed{0.9850 \leq p_{\text{collar}} \leq 1.0173}
+\]
+
+\textbf{Interpretation:}
+The collar acts like a ``capped and floored'' version of the stock. It provides downside protection (floor at $0.9$) while giving up upside potential (cap at $1.15$). The price range is fairly tight, reflecting that the traded options provide good information about the state-price distribution.
+
+\textbf{Python code:}
+\lstinputlisting[language=Python, basicstyle=\ttfamily\footnotesize]{../code/a17_18.py}
+

@@ -1,0 +1,32 @@
+\section*{6.9 Minimax rational function fitting}
+
+Show that the following problem is quasiconvex:
+\[
+\text{minimize} \quad \max_{i=1,\ldots,k} \left| \frac{p(t_i)}{q(t_i)} - y_i \right|
+\]
+where
+\[
+p(t) = a_0 + a_1 t + a_2 t^2 + \cdots + a_m t^m, \qquad q(t) = 1 + b_1 t + \cdots + b_n t^n,
+\]
+and the domain of the objective function is defined as
+\[
+D = \{(a, b) \in \mathbf{R}^{m+1} \times \mathbf{R}^n \mid q(t) > 0, \; \alpha \leq t \leq \beta\}.
+\]
+
+In this problem we fit a rational function $p(t)/q(t)$ to given data, while constraining the denominator polynomial to be positive on the interval $[\alpha, \beta]$. The optimization variables are the numerator and denominator coefficients $a_i$, $b_i$. The interpolation points $t_i \in [\alpha, \beta]$ and desired function values $y_i$, $i = 1, \ldots, k$, are given.
+
+\textbf{Solution.}
+
+\textbf{1. Domain is convex:} For fixed $t$, $q(t) > 0$ is a strict linear inequality in $b$. The domain $D$ is the intersection of open halfspaces over $t \in [\alpha, \beta]$, hence convex.
+
+\textbf{2. Sublevel sets are convex:} For $\gamma > 0$, the constraint $|p(t_i)/q(t_i) - y_i| \leq \gamma$ with $q(t_i) > 0$ becomes:
+\[
+-\gamma \, q(t_i) \leq p(t_i) - y_i \, q(t_i) \leq \gamma \, q(t_i)
+\]
+
+Since $p(t_i)$ is linear in $a$ and $q(t_i)$ is affine in $b$, these are \textbf{linear inequalities} in $(a,b)$. Thus $S_\gamma = D \cap \{2k \text{ halfspaces}\}$ is convex.
+
+\textbf{Conclusion:} Convex domain + convex sublevel sets $\Rightarrow$ \textbf{quasiconvex}.
+
+\textbf{Remark:} Solve via bisection on $\gamma$, checking LP feasibility at each step.
+

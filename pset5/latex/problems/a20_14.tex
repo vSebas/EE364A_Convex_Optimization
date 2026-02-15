@@ -1,0 +1,87 @@
+\section*{A20.14 Optimal operation of a microgrid}
+
+We consider a microgrid with a photovoltaic (PV) array, battery storage, and grid connection. The optimization is over one day with $N = 96$ periods (15-minute intervals).
+
+\textbf{Variables:}
+\begin{itemize}
+\item $p^{\text{grid}} \in \mathbf{R}^{96}$: power from grid (positive = buying, negative = selling)
+\item $p^{\text{batt}} \in \mathbf{R}^{96}$: battery power (positive = discharging, negative = charging)
+\item $q \in \mathbf{R}^{96}$: battery state of charge
+\end{itemize}
+
+\textbf{Constraints:}
+\begin{itemize}
+\item Power balance: $p^{\text{ld}} = p^{\text{grid}} + p^{\text{batt}} + p^{\text{pv}}$
+\item Battery dynamics: $q_{i+1} = q_i - \frac{1}{4}p^{\text{batt}}_i$ (with periodic condition $q_1 = q_{96} - \frac{1}{4}p^{\text{batt}}_{96}$)
+\item Battery limits: $0 \leq q_i \leq Q$, $-C \leq p^{\text{batt}}_i \leq D$
+\end{itemize}
+
+\textbf{Objective:} Minimize grid cost
+\[
+\frac{1}{4}\left( (R^{\text{buy}})^T (p^{\text{grid}})_+ - (R^{\text{sell}})^T (p^{\text{grid}})_- \right)
+\]
+
+\textbf{Problem data:} $Q = 27$ kWh, $C = 8$ kW (max charge), $D = 10$ kW (max discharge).
+
+\subsection*{(a) Optimal grid cost}
+
+\[
+\boxed{\text{Optimal grid cost} = \$32.77}
+\]
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{img/a20_14_powers.png}
+\caption{Optimal power profiles: grid power, load, PV output, and battery power.}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{img/a20_14_soc.png}
+\caption{Battery state of charge over the day.}
+\end{figure}
+
+\subsection*{(b) Locational Marginal Price (LMP)}
+
+The LMP is $4\nu$, where $\nu$ is the dual variable for the power balance constraint:
+
+\begin{center}
+\begin{tabular}{l|c}
+Statistic & Value \\
+\hline
+Average LMP & \$0.2395/kWh \\
+Max LMP & \$0.4500/kWh \\
+Min LMP & \$0.1400/kWh \\
+\end{tabular}
+\end{center}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{img/a20_14_lmp.png}
+\caption{LMP compared to grid buy/sell prices.}
+\end{figure}
+
+\textbf{Comment:} The LMP equals $R^{\text{buy}}$ when we're buying from the grid and $R^{\text{sell}}$ when we're selling. In between, when the battery is charging/discharging or constraints are active, the LMP takes intermediate values. The LMP is always between $R^{\text{sell}}$ and $R^{\text{buy}}$.
+
+\subsection*{(c) LMP Payments}
+
+Using the pricing scheme where each entity pays/receives based on $\nu^T p$:
+
+\begin{center}
+\begin{tabular}{l|r}
+Entity & Payment (\$) \\
+\hline
+Load pays & \$430.35 \\
+PV array is paid & \$265.80 \\
+Battery is paid & \$33.48 \\
+Grid is paid & \$131.07 \\
+\end{tabular}
+\end{center}
+
+\textbf{Balance check:} $430.35 = 265.80 + 33.48 + 131.07$ \checkmark
+
+The load pays for all the power it consumes at the LMP. The PV array receives payment for all the power it generates. The battery earns a profit by arbitraging --- charging when LMP is low and discharging when LMP is high. The grid receives net payment for the energy imported over the day.
+
+\textbf{Python code:}
+\lstinputlisting[language=Python, basicstyle=\ttfamily\footnotesize]{../code/a20_14.py}
+

@@ -1,0 +1,81 @@
+\section*{A6.27 Properties of least-$p$-norm solutions}
+
+Let $x^\star$ be optimal for the least-$p$-norm problem
+\[
+\begin{aligned}
+\text{minimize} \quad & \|x\|_p \\
+\text{subject to} \quad & Ax = b,
+\end{aligned}
+\]
+with variable $x \in \mathbf{R}^n$, where $A \in \mathbf{R}^{m \times n}$, with $m \ll n$. (And of course, $p \in [1, \infty]$.) Determine if the statements below are reasonable or unreasonable.
+
+\textbf{(a) For $p = 2$, we would expect to see many components of $x^\star$ equal to zero.}
+
+\textbf{Unreasonable.}
+
+For $p = 2$, the problem becomes:
+\[
+\begin{aligned}
+\text{minimize} \quad & \|x\|_2 \\
+\text{subject to} \quad & Ax = b
+\end{aligned}
+\]
+
+The optimal solution is the \emph{minimum-norm least squares solution}:
+\[
+x^\star = A^T(AA^T)^{-1}b = A^\dagger b
+\]
+where $A^\dagger$ is the Moore-Penrose pseudoinverse.
+
+This solution is a \textbf{linear function} of $b$. Since $x^\star = A^T y$ for some $y \in \mathbf{R}^m$, the solution is a linear combination of the rows of $A$. There is no mechanism that would make components exactly zero unless there is special structure in $A$ or $b$.
+
+The $\ell_2$ norm is \emph{strictly convex} and \emph{smooth}, which means the optimal solution "spreads" the effort across all components rather than concentrating it. We would \textbf{not} expect many zeros.
+
+\textbf{(b) For $p = 1$, we would expect to see many components of $x^\star$ equal to zero.}
+
+\textbf{Reasonable.}
+
+For $p = 1$, the problem becomes:
+\[
+\begin{aligned}
+\text{minimize} \quad & \|x\|_1 \\
+\text{subject to} \quad & Ax = b
+\end{aligned}
+\]
+
+This is known as \emph{basis pursuit} and is fundamental to compressed sensing and sparse recovery.
+
+The $\ell_1$ norm \textbf{promotes sparsity}. Geometrically, the $\ell_1$ ball has "corners" (vertices) that lie on the coordinate axes. The feasible set $\{x \mid Ax = b\}$ is an affine subspace of dimension $n - m$. The optimal solution occurs where this subspace first touches the expanding $\ell_1$ ball, which generically happens at a vertex or low-dimensional face.
+
+Since $m \ll n$, the affine subspace has high dimension ($n - m \approx n$), and the optimal solution typically has \textbf{at most $m$ nonzero components}. This means $n - m$ components are zero, which is "many" when $m \ll n$.
+
+\textbf{(c) For $p = \infty$, we would expect many components of $x^\star$ to take on the values $\pm\|x^\star\|_\infty$.}
+
+\textbf{Reasonable.}
+
+For $p = \infty$, the problem becomes:
+\[
+\begin{aligned}
+\text{minimize} \quad & \|x\|_\infty \\
+\text{subject to} \quad & Ax = b
+\end{aligned}
+\]
+
+The $\ell_\infty$ norm is $\|x\|_\infty = \max_i |x_i|$. Minimizing this means we want to make the largest component (in absolute value) as small as possible.
+
+Geometrically, the $\ell_\infty$ ball is a \emph{hypercube} $\{x \mid -t \leq x_i \leq t\}$. The optimal solution occurs where the affine subspace $\{x \mid Ax = b\}$ first touches the expanding hypercube. This generically happens on a \emph{face} of the hypercube, where many components are at their bounds $\pm t$.
+
+This is analogous to the \textbf{equioscillation} property in Chebyshev approximation: the optimal solution "spreads the load" so that many components achieve the maximum absolute value $\|x^\star\|_\infty$.
+
+Since $m \ll n$, we expect \textbf{at least $n - m$ components} to be at the bounds $\pm\|x^\star\|_\infty$.
+
+\textbf{Summary:}
+\begin{center}
+\begin{tabular}{c|c|l}
+$p$ & Statement & Reasoning \\
+\hline
+$2$ & Unreasonable & $\ell_2$ is smooth; solution spreads across components \\
+$1$ & Reasonable & $\ell_1$ promotes sparsity; expect $\leq m$ nonzeros \\
+$\infty$ & Reasonable & $\ell_\infty$ spreads load; many components at $\pm\|x^\star\|_\infty$ \\
+\end{tabular}
+\end{center}
