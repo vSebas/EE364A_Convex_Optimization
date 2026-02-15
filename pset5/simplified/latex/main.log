@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2026/dev/Arch Linux) (preloaded format=pdflatex 2026.2.6)  14 FEB 2026 22:47
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2026/dev/Arch Linux) (preloaded format=pdflatex 2026.2.6)  14 FEB 2026 23:49
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**/run/media/saveas/Secondary-Storage/Masters/EE364A/psets/pset5/latex/main.tex
-(/run/media/saveas/Secondary-Storage/Masters/EE364A/psets/pset5/latex/main.tex
+**/run/media/saveas/Secondary-Storage/Masters/EE364A/psets/pset5/simplified/latex/main.tex
+(/run/media/saveas/Secondary-Storage/Masters/EE364A/psets/pset5/simplified/latex/main.tex
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
 (/usr/share/texmf-dist/tex/latex/base/article.cls
@@ -357,27 +357,20 @@ Package caption Info: float package is loaded.
 Package caption Info: listings package is loaded.
 Package caption Info: End \AtBeginDocument code.
 \c@lstlisting=\count312
- (./problems/p5_13.tex
-LaTeX Font Info:    Trying to load font information for U+msa on input line 4.
+ (./problems/a6_2.tex
+LaTeX Font Info:    Trying to load font information for U+msa on input line 3.
  (/usr/share/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 4.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 3.
  (/usr/share/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-
-./problems/p5_13.tex:22: Package enumitem Error: (a) undefined.
-
-See the enumitem package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.22 \begin{enumerate}[(a)]
-                           
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
+<img/a6_2_fit.png, id=1, 617.1858pt x 393.6306pt>
+File: img/a6_2_fit.png Graphic file (type png)
+<use img/a6_2_fit.png>
+Package pdftex.def Info: img/a6_2_fit.png  used on input line 46.
+(pdftex.def)             Requested size: 375.80544pt x 239.68787pt.
 
 
 
@@ -390,81 +383,12 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}
 
 ]
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[2])
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[3] (./problems/p6_9.tex)
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[4] (./problems/a5_37.tex
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[5])
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[6] (./problems/a6_2.tex
-<img/a6_2_fit.png, id=34, 617.1858pt x 393.6306pt>
-File: img/a6_2_fit.png Graphic file (type png)
-<use img/a6_2_fit.png>
-Package pdftex.def Info: img/a6_2_fit.png  used on input line 62.
-(pdftex.def)             Requested size: 375.80544pt x 239.68787pt.
-
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[7]
-<img/a6_2_error.png, id=40, 627.7854pt x 393.6306pt>
+<img/a6_2_error.png, id=16, 627.7854pt x 393.6306pt>
 File: img/a6_2_error.png Graphic file (type png)
 <use img/a6_2_error.png>
-Package pdftex.def Info: img/a6_2_error.png  used on input line 68.
+Package pdftex.def Info: img/a6_2_error.png  used on input line 52.
 (pdftex.def)             Requested size: 375.80544pt x 235.6336pt.
- (../code/a6_2.py
 
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[8 <./img/a6_2_fit.png> <./img/a6_2_error.png>]
 
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -473,7 +397,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
-[9]
+[2 <./img/a6_2_fit.png> <./img/a6_2_error.png>])
 
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -482,7 +406,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
-[10]))
+[3] (./problems/a6_27.tex)
 
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -491,45 +415,11 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
-[11] (./problems/a6_27.tex
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[12])
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[13] (./problems/a16_11.tex
-Overfull \hbox (25.059pt too wide) in paragraph at lines 9--10
-[]\OT1/cmr/bx/n/10.95 Problem data: $\OML/cmm/m/it/10.95 n \OT1/cmr/m/n/10.95 = 4$, $\OML/cmm/m/it/10.95 m \OT1/cmr/m/n/10.95 = 2$, $\OML/cmm/m/it/10.95 T \OT1/cmr/m/n/10.95 = 100$, with $\OML/cmm/m/it/10.95 A$\OT1/cmr/m/n/10.95 , $\OML/cmm/m/it/10.95 B$\OT1/cmr/m/n/10.95 , and $\OML/cmm/m/it/10.95 x[]$ \OT1/cmr/m/n/10.95 from \OT1/cmtt/m/n/10.95 various[]obj[]regulator[]data.py\OT1/cmr/m/n/10.95 . 
- []
-
-
-./problems/a16_11.tex:13: Package enumitem Error: (a) undefined.
-
-See the enumitem package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.13 \begin{enumerate}[(a)]
-                           
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-<img/a16_11_controls.png, id=66, 859.5312pt x 569.0058pt>
+[4] (./problems/a16_11.tex
+<img/a16_11_controls.png, id=32, 859.5312pt x 569.0058pt>
 File: img/a16_11_controls.png Graphic file (type png)
 <use img/a16_11_controls.png>
-Package pdftex.def Info: img/a16_11_controls.png  used on input line 46.
+Package pdftex.def Info: img/a16_11_controls.png  used on input line 5.
 (pdftex.def)             Requested size: 469.75502pt x 310.98326pt.
 
 
@@ -540,7 +430,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
-[14] (../code/a16_11.py
+[5 <./img/a16_11_controls.png>])
 
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -549,7 +439,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
-[15 <./img/a16_11_controls.png>]
+[6] (./problems/a17_18.tex)
 
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -558,52 +448,16 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
-[16]))
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[17] (./problems/a17_18.tex
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[18] (../code/a17_18.py
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[19]))
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[20] (./problems/a20_14.tex
-<img/a20_14_powers.png, id=91, 1004.0712pt x 569.4876pt>
+[7] (./problems/a20_14.tex
+<img/a20_14_powers.png, id=45, 1004.0712pt x 569.4876pt>
 File: img/a20_14_powers.png Graphic file (type png)
 <use img/a20_14_powers.png>
-Package pdftex.def Info: img/a20_14_powers.png  used on input line 34.
+Package pdftex.def Info: img/a20_14_powers.png  used on input line 26.
 (pdftex.def)             Requested size: 469.75502pt x 266.43396pt.
-<img/a20_14_soc.png, id=92, 859.5312pt x 280.4076pt>
+<img/a20_14_soc.png, id=46, 859.5312pt x 280.4076pt>
 File: img/a20_14_soc.png Graphic file (type png)
 <use img/a20_14_soc.png>
-Package pdftex.def Info: img/a20_14_soc.png  used on input line 40.
+Package pdftex.def Info: img/a20_14_soc.png  used on input line 32.
 (pdftex.def)             Requested size: 375.80544pt x 122.601pt.
 
 
@@ -614,11 +468,11 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
-[21 <./img/a20_14_powers.png>]
-<img/a20_14_lmp.png, id=97, 859.5312pt x 280.4076pt>
+[8 <./img/a20_14_powers.png>]
+<img/a20_14_lmp.png, id=51, 859.5312pt x 280.4076pt>
 File: img/a20_14_lmp.png Graphic file (type png)
 <use img/a20_14_lmp.png>
-Package pdftex.def Info: img/a20_14_lmp.png  used on input line 60.
+Package pdftex.def Info: img/a20_14_lmp.png  used on input line 52.
 (pdftex.def)             Requested size: 375.80544pt x 122.601pt.
 
 
@@ -629,7 +483,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
-[22 <./img/a20_14_soc.png> <./img/a20_14_lmp.png>] (../code/a20_14.py
+[9 <./img/a20_14_soc.png> <./img/a20_14_lmp.png>])
 
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -638,52 +492,27 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
-[23]
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[24]))
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[25] 
+[10] 
 enddocument/afterlastpage (AED): lastpage setting LastPage.
 (./main.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
-
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
-
-Package lastpage Warning: Rerun to get the references right on input line 56.
-
  ) 
 Here is how much of TeX's memory you used:
- 8709 strings out of 475171
- 135884 string characters out of 5767096
- 1273168 words of memory out of 5000000
- 31582 multiletter control sequences out of 15000+600000
- 570161 words of font info for 79 fonts, out of 8000000 for 9000
+ 8556 strings out of 475171
+ 133595 string characters out of 5767096
+ 892168 words of memory out of 5000000
+ 31451 multiletter control sequences out of 15000+600000
+ 568900 words of font info for 75 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 68i,12n,77p,502b,2061s stack positions out of 10000i,1000n,20000p,200000b,200000s
- </home/saveas/.texlive/texmf-var/fonts/pk/ljfour/jknappen/ec/tctt0900.600pk> </home/saveas/.texlive/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1095.600pk></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb>
-Output written on main.pdf (25 pages, 863097 bytes).
+ 68i,12n,77p,381b,1990s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ </home/saveas/.texlive/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1095.600pk></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb>
+Output written on main.pdf (10 pages, 746925 bytes).
 PDF statistics:
- 195 PDF objects out of 1000 (max. 8388607)
- 117 compressed objects within 2 object streams
+ 116 PDF objects out of 1000 (max. 8388607)
+ 65 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  31 words of extra memory for PDF output out of 10000 (max. 10000000)
 

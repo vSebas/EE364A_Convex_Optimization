@@ -1,0 +1,101 @@
+\section*{A20.14 Optimal operation of a microgrid}
+
+A microgrid with PV array, battery storage, and grid connection is optimized over one day ($N = 96$ periods of 15 minutes).
+
+Variables: $p^{\text{grid}}$ (grid power, positive = buying), $p^{\text{batt}}$ (battery power, positive = discharging), $q$ (state of charge).
+
+Constraints:
+\begin{itemize}
+\item Power balance: $p^{\text{ld}} = p^{\text{grid}} + p^{\text{batt}} + p^{\text{pv}}$
+\item Battery dynamics: $q_{i+1} = q_i - \frac{1}{4}p^{\text{batt}}_i$ (periodic: $q_1 = q_{96} - \frac{1}{4}p^{\text{batt}}_{96}$)
+\item Bounds: $0 \leq q_i \leq Q$, $-C \leq p^{\text{batt}}_i \leq D$
+\end{itemize}
+
+Objective: Minimize grid cost $\frac{1}{4}\left( (R^{\text{buy}})^T (p^{\text{grid}})_+ - (R^{\text{sell}})^T (p^{\text{grid}})_- \right)$
+
+Data: $Q = 27$ kWh, $C = 8$ kW, $D = 10$ kW.
+
+\subsection*{(a) Optimal grid cost}
+
+\[
+\boxed{\text{Optimal grid cost} = \$32.77}
+\]
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{img/a20_14_powers.png}
+\caption{Optimal power profiles.}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{img/a20_14_soc.png}
+\caption{Battery state of charge.}
+\end{figure}
+
+\subsection*{(b) Locational Marginal Price (LMP)}
+
+The LMP is $4\nu$, where $\nu$ is the dual variable for the power balance constraint.
+
+\begin{center}
+\begin{tabular}{l|c}
+Statistic & Value \\
+\hline
+Average LMP & \$0.2395/kWh \\
+Max LMP & \$0.4500/kWh \\
+Min LMP & \$0.1400/kWh \\
+\end{tabular}
+\end{center}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{img/a20_14_lmp.png}
+\caption{LMP compared to grid buy/sell prices.}
+\end{figure}
+
+The LMP equals $R^{\text{buy}}$ when buying and $R^{\text{sell}}$ when selling. The battery arbitrages by charging when LMP is low and discharging when high.
+
+\subsection*{(c) LMP Payments}
+
+Each entity pays/receives based on LMP $\times$ power:
+
+\begin{center}
+\begin{tabular}{l|r}
+Entity & Payment \\
+\hline
+Load pays & \$430.35 \\
+PV is paid & \$265.80 \\
+Battery is paid & \$33.48 \\
+Grid is paid & \$131.07 \\
+\end{tabular}
+\end{center}
+
+Balance: $430.35 = 265.80 + 33.48 + 131.07$
+
+\textbf{Code:}
+\begin{lstlisting}[language=Python, basicstyle=\ttfamily\footnotesize]
+# Variables (p_grid = p_buy - p_sell for DCP compliance)
+p_buy = cp.Variable(N, nonneg=True)
+p_sell = cp.Variable(N, nonneg=True)
+p_batt = cp.Variable(N)
+q = cp.Variable(N)
+
+# Power balance
+constraints = [p_ld == p_buy - p_sell + p_batt + p_pv]
+
+# Battery dynamics (periodic)
+for i in range(1, N):
+    constraints.append(q[i] == q[i-1] - 0.25 * p_batt[i-1])
+constraints.append(q[0] == q[N-1] - 0.25 * p_batt[N-1])
+
+# Bounds
+constraints += [q >= 0, q <= Q, p_batt >= -C, p_batt <= D]
+
+# Objective
+cost = (1/4) * (R_buy @ p_buy - R_sell @ p_sell)
+prob = cp.Problem(cp.Minimize(cost), constraints)
+
+# LMP from dual variable
+LMP = -4 * constraints[0].dual_value
+\end{lstlisting}
+

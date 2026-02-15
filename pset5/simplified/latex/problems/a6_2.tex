@@ -1,0 +1,81 @@
+\section*{A6.2 Minimax rational fit to the exponential}
+
+As shown in problem 6.9, this is a quasiconvex optimization problem. It can be solved using bisection on the objective value $\alpha$, combined with a feasibility LP at each step.
+
+For a given $\alpha > 0$, the feasibility problem is:
+\[
+\left| \frac{p(t_i)}{q(t_i)} - y_i \right| \leq \alpha, \quad i = 1, \ldots, k
+\]
+where $p(t) = a_0 + a_1 t + a_2 t^2$ and $q(t) = 1 + b_1 t + b_2 t^2$.
+
+Since $q(t_i) > 0$, multiplying by $q(t_i)$ gives the linear constraints:
+\[
+-\alpha \, q(t_i) \leq p(t_i) - y_i \, q(t_i) \leq \alpha \, q(t_i), \quad i = 1, \ldots, k
+\]
+
+Expanding:
+\[
+-\alpha (1 + b_1 t_i + b_2 t_i^2) \leq (a_0 + a_1 t_i + a_2 t_i^2) - y_i (1 + b_1 t_i + b_2 t_i^2) \leq \alpha (1 + b_1 t_i + b_2 t_i^2)
+\]
+
+Rearranging, for each $i$:
+\[
+a_0 + a_1 t_i + a_2 t_i^2 - (y_i + \alpha) b_1 t_i - (y_i + \alpha) b_2 t_i^2 \leq y_i + \alpha
+\]
+\[
+a_0 + a_1 t_i + a_2 t_i^2 - (y_i - \alpha) b_1 t_i - (y_i - \alpha) b_2 t_i^2 \geq y_i - \alpha
+\]
+
+These are linear in the variables $(a_0, a_1, a_2, b_1, b_2)$.
+
+\textbf{Results.}
+
+Bisection yields:
+\begin{align*}
+a_0 &= 1.0099 \\
+a_1 &= 0.6117 \\
+a_2 &= 0.1134 \\
+b_1 &= -0.4147 \\
+b_2 &= 0.0485
+\end{align*}
+
+\textbf{Optimal objective value:} $\alpha^\star \approx 0.0233$. The following plots are also obtained.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{img/a6_2_fit.png}
+    \caption{Data (blue dots) and rational fit $f(t)$ (red line).}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{img/a6_2_error.png}
+    \caption{Fitting error $f(t_i) - y_i$.}
+\end{figure}
+
+\textbf{Code:}
+\begin{lstlisting}[language=Python, basicstyle=\ttfamily\footnotesize]
+def check_feasibility(alpha, Tpowers, y):
+    a = cp.Variable(3)
+    b = cp.Variable(2)
+    q_coeffs = cp.hstack([1, b])
+    p_vals = Tpowers @ a
+    q_vals = Tpowers @ q_coeffs
+    constraints = [
+        p_vals <= cp.multiply(y + alpha, q_vals),
+        p_vals >= cp.multiply(y - alpha, q_vals),
+    ]
+    prob = cp.Problem(cp.Minimize(0), constraints)
+    prob.solve()
+    return prob.status == 'optimal', a.value, b.value
+
+# Bisection
+l, u = 0.0, np.exp(3)
+while u - l >= 1e-3:
+    alpha = (l + u) / 2
+    feasible, a, b = check_feasibility(alpha, Tpowers, y)
+    if feasible:
+        u, a_opt, b_opt, alpha_opt = alpha, a, b, alpha
+    else:
+        l = alpha
+\end{lstlisting}

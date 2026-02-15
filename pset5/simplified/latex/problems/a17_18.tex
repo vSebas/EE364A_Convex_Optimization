@@ -1,0 +1,51 @@
+\section*{A17.18 Option price bounds}
+
+Given a risk-free asset, stock, two calls ($K=1.1, 1.2$), and two puts ($K=0.8, 0.7$) with known prices, find the arbitrage-free price bounds for a collar with floor $F=0.9$ and cap $C=1.15$.
+
+
+Solution: A state-price vector $\pi \in \mathbf{R}^m$ with $\pi \succeq 0$ assigns a "price" to each scenario. For arbitrage-free pricing:
+\[
+p_j = \sum_{i=1}^{m} \pi_i V_{ij} = v_j^T \pi
+\]
+where $V_{ij}$ is the payoff of asset $j$ in scenario $i$.
+
+Let $V_{\text{known}} \in \mathbf{R}^{m \times 6}$ be the payoff matrix for the 6 known assets, $p_{\text{known}} \in \mathbf{R}^6$ their prices, and $v_{\text{collar}} \in \mathbf{R}^m$ the collar payoffs. The price bounds are:
+
+\textbf{Lower bound:}
+\[
+\begin{aligned}
+\text{minimize} \quad & v_{\text{collar}}^T \pi \\
+\text{subject to} \quad & V_{\text{known}}^T \pi = p_{\text{known}} \\
+& \pi \succeq 0
+\end{aligned}
+\]
+
+\textbf{Upper bound:} Same with maximize.
+
+\textbf{Results:}
+\[
+\boxed{0.9850 \leq p_{\text{collar}} \leq 1.0173}
+\]
+
+\textbf{Code:}
+\begin{lstlisting}[language=Python, basicstyle=\ttfamily\footnotesize]
+# Payoff matrix for known assets
+V_known[:, 0] = r                          # Risk-free
+V_known[:, 1] = S                          # Stock
+V_known[:, 2] = np.maximum(0, S - 1.1)     # Call K=1.1
+V_known[:, 3] = np.maximum(0, S - 1.2)     # Call K=1.2
+V_known[:, 4] = np.maximum(0, 0.8 - S)     # Put K=0.8
+V_known[:, 5] = np.maximum(0, 0.7 - S)     # Put K=0.7
+
+# Collar payoff: min(C, max(F, S))
+v_collar = np.minimum(1.15, np.maximum(0.9, S))
+
+# State-price vector and constraints
+pi = cp.Variable(m)
+constraints = [V_known.T @ pi == prices_known, pi >= 0]
+
+# Price bounds
+prob_lower = cp.Problem(cp.Minimize(v_collar @ pi), constraints)
+prob_upper = cp.Problem(cp.Maximize(v_collar @ pi), constraints)
+\end{lstlisting}
+

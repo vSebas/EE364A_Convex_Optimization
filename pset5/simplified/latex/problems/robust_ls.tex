@@ -1,0 +1,93 @@
+\section*{Robust least-squares with interval coefficient matrix}
+
+An \emph{interval matrix} in $\mathbf{R}^{m \times n}$ is a matrix whose entries are intervals:
+\[
+\mathcal{A} = \{A \in \mathbf{R}^{m \times n} \mid |A_{ij} - \bar{A}_{ij}| \leq R_{ij}, \; i = 1, \ldots, m, \; j = 1, \ldots, n\}.
+\]
+The matrix $\bar{A} \in \mathbf{R}^{m \times n}$ is called the \emph{nominal value} or \emph{center value}, and $R \in \mathbf{R}^{m \times n}$, which is elementwise nonnegative, is called the \emph{radius}.
+
+The \textbf{robust least-squares problem}, with interval matrix, is
+\[
+\text{minimize} \quad \sup_{A \in \mathcal{A}} \|Ax - b\|_2,
+\]
+with optimization variable $x \in \mathbf{R}^n$. The problem data are $\mathcal{A}$ (i.e., $\bar{A}$ and $R$) and $b \in \mathbf{R}^m$. The objective, as a function of $x$, is called the \emph{worst-case residual norm}. The robust least-squares problem is evidently a convex optimization problem.
+
+\textbf{(a) Formulate the interval matrix robust least-squares problem as a standard optimization problem, e.g., a QP, SOCP, or SDP.}
+
+\textbf{Solution.}
+
+The problem is equivalent to
+\[
+\text{minimize} \quad \sup_{A \in \mathcal{A}} \|Ax - b\|_2^2,
+\]
+which can be reformulated as
+\[
+\begin{aligned}
+\text{minimize} \quad & y^T y \\
+\text{subject to} \quad & -y \preceq Ax - b \preceq y, \quad \text{for all } A \in \mathcal{A}.
+\end{aligned}
+\]
+
+For the worst-case residual, we have:
+\[
+\sup_{A \in \mathcal{A}} (Ax - b)_i = \sum_{j=1}^n (\bar{A}_{ij} x_j + R_{ij}|x_j|) - b_i
+\]
+\[
+\inf_{A \in \mathcal{A}} (Ax - b)_i = \sum_{j=1}^n (\bar{A}_{ij} x_j - R_{ij}|x_j|) - b_i
+\]
+
+Introducing $z \in \mathbf{R}^n$ with $z_j = |x_j|$, we can write the problem as the \textbf{QP}:
+\[
+\begin{aligned}
+\text{minimize} \quad & y^T y \\
+\text{subject to} \quad & \bar{A}x + Rz - b \preceq y \\
+& \bar{A}x - Rz - b \succeq -y \\
+& -z \preceq x \preceq z
+\end{aligned}
+\]
+with variables $x \in \mathbf{R}^n$, $y \in \mathbf{R}^m$, $z \in \mathbf{R}^n$.
+
+\textbf{Alternative formulation:} The worst-case residual norm can be expressed as
+\[
+f(x) = \sup_{A \in \mathcal{A}} \|Ax - b\|_2^2 = \||\bar{A}x - b| + R|x|\|_2^2
+\]
+where $|x|$ denotes the elementwise absolute value. Thus, the robust least-squares problem is:
+\[
+\text{minimize} \quad \||\bar{A}x - b| + R|x|\|_2
+\]
+
+This can also be formulated as an \textbf{SOCP}:
+\[
+\begin{aligned}
+\text{minimize} \quad & \|t\|_2 \\
+\text{subject to} \quad & |\bar{A}x - b| + R|x| \preceq t
+\end{aligned}
+\]
+
+\textbf{(b) Specific problem instance with $m = 4$, $n = 3$.}
+
+\[
+\mathcal{A} = \begin{bmatrix}
+60 \pm 0.05 & 45 \pm 0.05 & -8 \pm 0.05 \\
+90 \pm 0.05 & 30 \pm 0.05 & -30 \pm 0.05 \\
+0 \pm 0.05 & -8 \pm 0.05 & -4 \pm 0.05 \\
+30 \pm 0.05 & 10 \pm 0.05 & -10 \pm 0.05
+\end{bmatrix}, \quad
+b = \begin{bmatrix} -6 \\ -3 \\ 18 \\ -9 \end{bmatrix}
+\]
+
+\textbf{Results:}
+
+\begin{center}
+\begin{tabular}{l|c|c}
+& Nominal LS ($x_{\text{ls}}$) & Robust LS ($x_{\text{rls}}$) \\
+\hline
+Nominal residual norm $\|\bar{A}x - b\|_2$ & 7.59 & 17.71 \\
+Worst-case residual norm & 26.70 & 17.79 \\
+\end{tabular}
+\end{center}
+
+The robust solution has a larger nominal residual (17.71 vs 7.59), but a significantly smaller worst-case residual (17.79 vs 26.70). This demonstrates the trade-off: the robust solution sacrifices nominal performance for better worst-case guarantees.
+
+\textbf{Python code:}
+\lstinputlisting[language=Python, basicstyle=\ttfamily\footnotesize]{../code/robust_ls.py}
