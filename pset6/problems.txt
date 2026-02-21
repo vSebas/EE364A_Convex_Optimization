@@ -1,0 +1,11 @@
+From bv_cvxbook.pdf:
+4.13: Robust LP with interval coefficients. (p. 193)
+
+From additional_exercises.pdf:
+A4.25: Probability bounds. (p. 40)
+A6.13: Fitting with censored data. (p. 79)
+A7.1: Maximum likelihood estimation of x and noise mean and covariance. (p. 94) 
+A15.13: Bandlimited signal recovery from zero-crossings. (p. 183)
+A17.30: Maximum Sharpe ratio portfolio. (p. 228)
+A19.10: Scheduling. (p. 264)
+Note: A6.13 titled Fitting with censored data. is labeled A6.14 in the latest pdf.
