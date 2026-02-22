@@ -1,2 +1,64 @@
 \section*{4.13 Robust LP with interval coefficients}
 
+For the robust LP:
+\begin{align*}
+\text{minimize} \quad & c^T x \\
+\text{subject to} \quad & Ax \preceq b \quad \text{for all } A \in \mathcal{A}
+\end{align*}
+where $\mathcal{A} = \{A \in \mathbf{R}^{m \times n} \mid \bar{A}_{ij} - V_{ij} \leq A_{ij} \leq \bar{A}_{ij} + V_{ij}\}$. So each coefficient of $A$ (uncertainty set) lies in a box/interval.
+
+\subsubsection*{Reformulation as an LP}
+
+For each constraint $i$, the robust requirement is
+\[
+\sum_{j=1}^{n} A_{ij} x_j \le b_i 
+\quad \text{for all } A \in \mathcal{A}
+\]
+This is equivalent to requiring that the worst-case value of the left-hand side
+satisfies the inequality:
+\[
+\sup_{A \in \mathcal{A}} (Ax)_i \le b_i
+\]
+Since $\mathcal{A}$ is a compact set and $(Ax)_i$ is linear in $A$, 
+the supremum is attained and equals a maximum:
+\[
+\max_{A \in \mathcal{A}} \sum_{j=1}^{n} A_{ij} x_j \le b_i
+\]
+Because the uncertainty set is a product of independent intervals, 
+the maximization separates across $j$, giving
+\[
+\sum_{j=1}^{n} 
+\max_{A_{ij} \in [\bar A_{ij}-V_{ij},\,\bar A_{ij}+V_{ij}]} 
+A_{ij} x_j
+\le b_i
+\]
+For each term,
+\[
+\max_{A_{ij} \in [\bar A_{ij}-V_{ij},\,\bar A_{ij}+V_{ij}]} 
+A_{ij} x_j
+=
+\bar A_{ij} x_j + V_{ij} |x_j|
+\]
+Therefore the robust constraints are equivalent to
+\[
+\bar A x + V |x| \preceq b.
+\]
+To express this as a linear program, introduce auxiliary variables 
+$y \in \mathbb{R}^n$ satisfying
+\[
+y_j \ge |x_j| \quad \text{for } j=1,\dots,n
+\]
+which is equivalent to the linear inequalities
+\[
+y \succeq x, 
+\qquad
+y \succeq -x
+\]
+The final LP formulation is
+\[
+\begin{aligned}
+\text{minimize} \quad & c^\top x \\
+\text{subject to} \quad & \bar A x + V y \preceq b \\
+& -y \preceq x \preceq y
+\end{aligned}
+\]

@@ -1,2 +1,85 @@
 \section*{A4.25 Probability bounds}
 
+Given random variables $X_1, X_2, X_3, X_4 \in \{0,1\}$ with:
+\begin{align*}
+\mathbf{prob}(X_1 = 1) &= 0.9 \\
+\mathbf{prob}(X_2 = 1) &= 0.9 \\
+\mathbf{prob}(X_3 = 1) &= 0.1 \\
+\mathbf{prob}(X_1 = 1, X_4 = 0 \mid X_3 = 1) &= 0.7 \\
+\mathbf{prob}(X_4 = 1 \mid X_2 = 1, X_3 = 0) &= 0.6
+\end{align*}
+
+\subsubsection*{Solution}
+The objective quantity to bound (linear in $p$) is:
+\[
+\mathbf{prob}(X_4=1) = \sum_{i,j,k} p_{ijk1}
+\]
+Then, identify the constraints as:
+\begin{itemize}
+    \item The joint distribution as a vector in $\mathbb{R}^{16}$:
+    \[
+    p_{ijkl} = \mathbf{prob}(X_1=i, X_2=j, X_3=k, X_4=l),
+    \quad i,j,k,l\in\{0,1\}
+    \]
+    \item Probability simplex constraints:
+    \[
+    p_{ijkl}\ge 0 \ \ \forall i,j,k,l,
+    \qquad
+    \sum_{i,j,k,l} p_{ijkl} = 1.
+    \]
+    \item Given marginals as linear constraints:
+    \begin{itemize}
+        \item $\mathbf{prob}(X_1 = 1)=0.9 \ \to\ \displaystyle \sum_{j,k,l} p_{1jkl} = 0.9$
+        \item $\mathbf{prob}(X_2 = 1)=0.9 \ \to\ \displaystyle \sum_{i,k,l} p_{i1kl} = 0.9$
+        \item $\mathbf{prob}(X_3 = 1)=0.1 \ \to\ \displaystyle \sum_{i,j,l} p_{ij1l} = 0.1$
+    \end{itemize}
+
+    \item Given conditionals converted to linear constraints:
+    \begin{itemize}
+        \item The $\mathbf{prob}(X_1=1, X_4=0 \mid X_3=1)=0.7$ means
+        \[
+        \frac{\mathbf{prob}(X_1=1,X_4=0,X_3=1)}{\mathbf{prob}(X_3=1)} = 0.7
+        \]
+        hence
+        \[
+        \sum_{j} p_{1j10} = 0.7 \sum_{i,j,l} p_{ij1l}=0.07
+        \]
+        \item The $\mathbf{prob}(X_4=1 \mid X_2=1, X_3=0)=0.6$ means
+        \[
+        \frac{\mathbf{prob}(X_4=1,X_2=1,X_3=0)}{\mathbf{prob}(X_2=1,X_3=0)} = 0.6
+        \]
+        hence
+        \[
+        \sum_{i} p_{i101} = 0.6 \sum_{i,l} p_{i10l}.
+        \]
+    \end{itemize}
+\end{itemize}
+So the solution involves solving two LPs (minimize and maximize) for the given objective, subject to the constraints above.
+
+\subsubsection*{Code:}
+\begin{lstlisting}[language=Python, basicstyle=\ttfamily\footnotesize]
+p = cp.Variable((2, 2, 2, 2), nonneg=True)  # so each p is >= 0
+constraints = [
+    cp.sum(p) == 1,
+    cp.sum(p[1, :, :, :]) == 0.9,      # prob(X1=1)
+    cp.sum(p[:, 1, :, :]) == 0.9,      # prob(X2=1)
+    cp.sum(p[:, :, 1, :]) == 0.1,      # prob(X3=1)
+    cp.sum(p[1, :, 1, 0]) == 0.07,     # prob(X1=1,X4=0,X3=1)
+    cp.sum(p[:, 1, 0, 1]) == 0.6 * cp.sum(p[:, 1, 0, :])
+]
+prob_X4_1 = cp.sum(p[:, :, :, 1])
+
+prob_min = cp.Problem(cp.Minimize(prob_X4_1), constraints)
+prob_min.solve()
+p_min = prob_min.value
+
+prob_max = cp.Problem(cp.Maximize(prob_X4_1), constraints)
+prob_max.solve()
+p_max = prob_max.value
+\end{lstlisting}
+
+\subsubsection*{Results:}
+\begin{itemize}
+    \item Minimum $\mathbf{prob}(X_4 = 1) = \boxed{0.48}$
+    \item Maximum $\mathbf{prob}(X_4 = 1) = \boxed{0.61}$
+\end{itemize}
