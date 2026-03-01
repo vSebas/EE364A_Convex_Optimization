@@ -1,2 +1,21 @@
-\section*{A7.1 Maximum likelihood estimation of x and noise mean and covariance}
+\section*{A7.1 Maximum likelihood estimation of $x$ and noise mean and covariance}
 
+The log-likelihood is:
+\[
+\sum_{i=1}^{m} \log p(y_i - a_i^T x) = -m \log \sigma + \sum_{i=1}^{m} \log f\left(\frac{y_i - a_i^T x - \mu}{\sigma}\right)
+\]
+
+Let $r_i = y_i - a_i^T x - \mu$ denote the residuals.
+
+If $f$ is log-concave, then $\log f$ is concave. It is required to show that the composition $\log f(r_i/\sigma)$ preserves concavity.
+
+Consider $g(r, \sigma) = \log f(r/\sigma)$ for $\sigma > 0$. The function $r/\sigma$ is quasilinear (linear in $r$ for fixed $\sigma$, and the perspective operation preserves concavity).
+
+Using the change of variables $\tau = 1/\sigma^2$ and noting that:
+
+\begin{itemize}
+    \item $-m \log \sigma = \frac{m}{2} \log \tau$ is concave in $\tau > 0$
+    \item For log-concave $f$, $\log f(r\sqrt{\tau})$ is jointly concave in $(r, \tau)$
+\end{itemize}
+
+Therefore, maximizing the log-likelihood is equivalent to maximizing a concave function, a convex optimization problem.

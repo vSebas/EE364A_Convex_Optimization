@@ -1,2 +1,53 @@
 \section*{A15.13 Bandlimited signal recovery from zero-crossings}
 
+%Let $y \in \mathbf{R}^n$ be a bandlimited signal:
+%\[
+%y_t = \sum_{j=1}^{B} a_j \cos\left(\frac{2\pi(f_{\min}+j-1)t}{n}\right) + b_j \sin\left(\frac{2\pi(f_{\min}+j-1)t}{n}\right), \quad t = 1, \ldots, n
+%\]
+
+%We are given only the sign $s = \text{sign}(y)$ and seek an estimate $\hat{y}$ consistent with the signs and bandlimited structure.
+
+%\subsection*{(a) Convex formulation}
+\subsection*{(a)}
+
+Let $F \in \mathbf{R}^{n \times 2B}$ be the Fourier basis matrix. Then $y = F\theta$ where $\theta = [a; b]$.
+
+\textbf{Optimization problem:}
+\begin{align*}
+\text{minimize} \quad & \|F\theta\|_2 \\
+\text{subject to} \quad & s_t (F\theta)_t \geq 0, \quad t = 1, \ldots, n \\
+& (F\theta)_{t_0} = 1 \quad \text{(normalization)}
+\end{align*}
+
+The sign constraints $s_t y_t \geq 0$ ensure consistency with observed signs. The normalization fixes the scale (since $y$ and $\alpha y$ for $\alpha > 0$ have the same signs).
+
+This is a convex SOCP (second-order cone program).
+
+\subsection*{(b) Results}
+
+\begin{itemize}
+    \item Signal length: $n = 2048$
+    \item Bandwidth: $B = 9$, $f_{\min} = 4$
+    \item Relative recovery error: $\|\hat{y} - y\|_2 / \|y\|_2 = \boxed{0.146}$
+    \item Sign matches: 2033/2048 (99.3\%)
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{img/a15_13.png}
+    \caption{Recovered signal vs true signal. The recovery captures the main structure with moderate accuracy.}
+\end{figure}
+
+\textbf{Code:}
+\begin{lstlisting}[language=Python, basicstyle=\ttfamily\footnotesize]
+F = np.zeros((n, 2 * B))
+for j in range(B):
+    freq = f_min + j
+    F[:, j] = np.cos(2 * np.pi * freq * t / n)
+    F[:, B + j] = np.sin(2 * np.pi * freq * t / n)
+
+coeff = cp.Variable(2 * B)
+y_var = F @ coeff
+constraints = [cp.multiply(s, y_var) >= 0, y_var[pos_idx] == 1]
+prob = cp.Problem(cp.Minimize(cp.norm2(y_var)), constraints)
+\end{lstlisting}

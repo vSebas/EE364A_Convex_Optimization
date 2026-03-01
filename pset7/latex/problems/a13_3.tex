@@ -1,0 +1,48 @@
+\section*{A13.3 Ridge Regression}
+
+%\textbf{Problem:} Suppose $A \in \mathbf{R}^{m \times n}$, and we need to compute $x$ that minimizes $\|Ax - b\|_2^2 + (\rho/2)\|x\|_2^2$, where $\rho > 0$. (This is ridge regression.)
+
+\subsection*{(a) Tall matrix ($m \ge n$)}
+
+% The flop count (order) of a good method is:
+
+$mn^2$
+
+% \textbf{Derivation:} The optimality condition is:
+% \[
+% (A^T A + (\rho/2) I) x = A^T b
+% \]
+
+% Let $H = A^T A + (\rho/2) I \in \mathbf{R}^{n \times n}$. The algorithm:
+% \begin{enumerate}
+    % \item Compute $A^T A$: $O(mn^2)$ flops (dominant for $m \ge n$)
+    % \item Add $(\rho/2) I$: $O(n)$ flops
+    % \item Compute $A^T b$: $O(mn)$ flops
+    % \item Cholesky factorization of $H$: $O(n^3/3)$ flops
+    % \item Solve via forward/back substitution: $O(n^2)$ flops
+% \end{enumerate}
+
+% Total: $O(mn^2 + n^3) = O(mn^2)$ for $m \ge n$.
+
+\subsection*{(b) Wide matrix ($m \le n$)}
+
+% The flop count (order) of a good method is:
+
+$m^2 n$
+
+% \textbf{Derivation:} Use the matrix inversion lemma (Woodbury identity). For $H = A^T A + (\rho/2) I$:
+% \[
+% H^{-1} = \frac{2}{\rho}\left(I - A^T(AA^T + (\rho/2) I)^{-1}A\right)
+% \]
+
+% So $x = H^{-1} A^T b$ can be computed as:
+% \begin{enumerate}
+%     \item Compute $AA^T \in \mathbf{R}^{m \times m}$: $O(m^2 n)$ flops (dominant for $m \le n$)
+%     \item Add $(\rho/2) I$: $O(m)$ flops
+%     \item Cholesky factorization of $AA^T + (\rho/2) I$: $O(m^3/3)$ flops
+%     \item Compute $Ab$: $O(mn)$ flops
+%     \item Solve $(AA^T + (\rho/2)I) z = Ab$: $O(m^2)$ flops
+%     \item Compute $x = (2/\rho)(A^T b - A^T z)$: $O(mn)$ flops
+% \end{enumerate}
+
+% Total: $O(m^2 n + m^3) = O(m^2 n)$ for $m \le n$.

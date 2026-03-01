@@ -4,6 +4,8 @@ From bv_cvxbook.pdf:
 From additional_exercises.pdf:
 A4.25: Probability bounds. (p. 40)
 A6.13: Fitting with censored data. (p. 79)
+
+to-check:
 A7.1: Maximum likelihood estimation of x and noise mean and covariance. (p. 94) 
 A15.13: Bandlimited signal recovery from zero-crossings. (p. 183)
 A17.30: Maximum Sharpe ratio portfolio. (p. 228)

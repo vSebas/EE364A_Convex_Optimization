@@ -1,0 +1,84 @@
+\section*{A8.16 Fitting a Sphere to Data}
+
+%\textbf{Problem:} Consider fitting a sphere $\{x \in \mathbf{R}^n \mid \|x - c\|_2 = r\}$ to $m$ points $u_1, \ldots, u_m \in \mathbf{R}^n$ by minimizing the loss function:
+%\[
+%\sum_{i=1}^m \left(\|u_i - c\|_2^2 - r^2\right)^2
+%\]
+%over variables $c \in \mathbf{R}^n$, $r \in \mathbf{R}$.
+
+\subsection*{(a): Convex formulation}
+
+With the substitution $t = r^2 - \|c\|_2^2$, we have:
+\begin{align*}
+\|u_i - c\|_2^2 - r^2
+&= \|u_i\|_2^2 - 2u_i^T c + \|c\|_2^2 - r^2 \\
+&= \|u_i\|_2^2 - 2u_i^T c - (r^2 - \|c\|_2^2) \\
+&= \|u_i\|_2^2 - 2u_i^T c - t .
+\end{align*}
+The loss function becomes:
+\[
+\sum_{i=1}^m \left(\|u_i\|_2^2 - 2u_i^T c - t\right)^2,
+\]
+so the problem is the least-squares problem in variables $(c,t)$:
+\[
+\text{minimize}_{c,\; t}
+\quad \sum_{i=1}^m \left(-2u_i^T c + \|u_i\|_2^2 - t\right)^2,
+\]
+which is a convex quadratic optimization problem.
+
+From $t = r^2 - \|c\|_2^2$, we have
+\[
+r^2 = t + \|c\|_2^2.
+\]
+After solving for $(c^*,t^*)$, we set
+\[
+r^* = \sqrt{t^* + \|c^*\|_2^2}.
+\]
+
+%Moreover, $t^* + \|c^*\|_2^2 \ge 0$ at the optimum: for any fixed $c$, minimizing
+%$\sum_{i=1}^m (\|u_i-c\|_2^2 - s)^2$ over $s=r^2$ gives
+%$s^*(c)=\frac{1}{m}\sum_{i=1}^m \|u_i-c\|_2^2 \ge 0$.
+%Since $s^*(c)=t+\|c\|_2^2$, the recovered $r^*$ is well-defined (allowing the
+%degenerate case $r^*=0$).
+
+\subsection*{(b): example}
+
+%Using data from \texttt{sphere\_fit\_data.py} with $n = 2$ and $m = 50$, we solve the least squares problem.
+
+The problem in matrix form is:
+\[
+\text{minimize} \quad \|Ax - b\|_2^2
+\]
+where $x = \begin{bmatrix} c \\ t \end{bmatrix} \in \mathbf{R}^{n+1}$, and
+\[
+A = \begin{bmatrix} -2u_1^T & -1 \\ \vdots & \vdots \\ -2u_m^T & -1 \end{bmatrix}, \quad b = \begin{bmatrix} -\|u_1\|_2^2 \\ \vdots \\ -\|u_m\|_2^2 \end{bmatrix}
+\]
+The solution is $x^* = (A^T A)^{-1} A^T b$.
+\textbf{Results:}
+\[
+c^* = (1.4759, -0.0440), \quad t^* = -1.1106, \quad r^* = \boxed{1.0342}
+\]
+The optimal objective value is $2.9038$.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\textwidth]{img/a8_16.png}
+\caption{Fitted circle (blue) and data points (red) for the sphere fitting problem.}
+\end{figure}
+
+\textbf{Code:}
+\begin{lstlisting}[language=Python, basicstyle=\ttfamily\footnotesize]
+A = np.zeros((m, n + 1))
+b = np.zeros(m)
+for i in range(m):
+    u_i = U[:, i]
+    A[i, :n] = -2 * u_i
+    A[i, n] = -1
+    b[i] = -np.dot(u_i, u_i)
+
+x_star = np.linalg.lstsq(A, b, rcond=None)[0]
+c_star = x_star[:n]
+t_star = x_star[n]
+
+r_star = np.sqrt(t_star + np.dot(c_star, c_star))
+\end{lstlisting}

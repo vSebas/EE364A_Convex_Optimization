@@ -1,0 +1,35 @@
+\section*{A9.13 Newton's Method in Machine Learning Problems}
+
+%\textbf{Problem:} Newton's method is seldom used to solve large unconstrained problems with smooth objective that arise in machine learning. Choose the most reasonable explanation from among the ones below.
+
+%\begin{enumerate}[(a)]
+%    \item Common loss functions are not self-concordant.
+%    \item Newton's method does not work well on noisy data.
+%    \item Machine learning researchers don't really understand linear algebra.
+%    \item Due to the large problem size, it is generally not practical to form or store the Hessian, let alone compute the Newton step.
+%\end{enumerate}
+
+\subsection*{Answer}
+
+(d) Due to the large problem size, it is generally not practical to form or store the Hessian, let alone compute the Newton step
+In ML the number of parameters is huge, so forming/storing an $n \times n$ Hessian and computing the Newton step is usually too expensive in memory and time.
+
+% \textbf{Explanation:} In machine learning, problems typically have very large dimensions:
+% \begin{itemize}
+%     \item Number of parameters $n$ can be millions or billions (e.g., neural networks)
+%     \item Number of data points $m$ can be millions or more
+% \end{itemize}
+
+% Newton's method requires:
+% \begin{enumerate}
+%     \item \textbf{Forming the Hessian} $\nabla^2 f(x) \in \mathbf{R}^{n \times n}$: This requires $O(n^2)$ storage, which is infeasible for $n = 10^6$ (would need $10^{12}$ entries $\approx$ terabytes)
+%     \item \textbf{Solving the Newton system} $\nabla^2 f(x) \Delta x = -\nabla f(x)$: This requires $O(n^3)$ operations for a dense system, which is computationally prohibitive
+% \end{enumerate}
+
+% In contrast, gradient-based methods (SGD, Adam, etc.) only require:
+% \begin{itemize}
+%     \item $O(n)$ storage for the gradient
+%     \item $O(n)$ operations per iteration (or $O(n \cdot \text{batch size})$ for mini-batch)
+% \end{itemize}
+
+% While options (a) and (b) have some validity, option (d) is the primary practical bottleneck. Self-concordance (a) is more relevant for interior point methods, and noisy data (b) affects all methods similarly. Option (c) is clearly not a serious answer.

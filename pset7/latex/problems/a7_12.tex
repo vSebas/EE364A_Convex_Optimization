@@ -1,0 +1,60 @@
+\section*{A7.12 Cox Proportional Hazards Model}
+
+%\textbf{Problem:} Let $T$ be a continuous random variable taking values in $\mathbf{R}_+$, modeling an event time (e.g., death or machine failure). The survival function is $S(t) = \mathbf{prob}(T \ge t)$, with $S(0) = 1$, $S'(t) \le 0$, and $\lim_{t \to \infty} S(t) = 0$. The hazard rate is $\lambda(t) = -S'(t)/S(t) \in \mathbf{R}_+$.
+
+%The Cox proportional hazards model gives the hazard rate as:
+%\[
+%\lambda(t) = \lambda_0(t) \exp(w^T x)
+%\]
+%where $\lambda_0$ is the baseline hazard rate, $w \in \mathbf{R}^n$ is the parameter vector, and $x \in \mathbf{R}^n$ are features.
+%
+%Given observed event times $t^j$ with features $x^j$ for $j = 1, \ldots, N$, and assuming $\lambda_0$ is known, show that maximum likelihood estimation of $w$ is a convex optimization problem.
+%
+%\subsection*{Solution}
+
+The survival function can be expressed in terms of the hazard rate:
+\[
+S(t) = \exp\left(-\int_0^t \lambda(\tau) \, d\tau\right)
+\]
+
+Under the Cox proportional hazards model:
+\[
+S(t) = \exp\left(-\exp(w^T x) \int_0^t \lambda_0(\tau) \, d\tau\right)
+\]
+
+The density of $T$ is:
+\[
+p(t) = -S'(t) = \lambda(t) S(t) = \lambda_0(t) \exp(w^T x) \exp\left(-\exp(w^T x) \int_0^t \lambda_0(\tau) \, d\tau\right)
+\]
+
+For observation $j$ with event time $t^j$ and features $x^j$:
+\[
+\log p(t^j \mid x^j, w) = \log \lambda_0(t^j) + w^T x^j - \exp(w^T x^j) \int_0^{t^j} \lambda_0(\tau) \, d\tau
+\]
+
+The log-likelihood over all observations is:
+\[
+\ell(w) = \sum_{j=1}^N \left[\log \lambda_0(t^j) + w^T x^j - \exp(w^T x^j) \int_0^{t^j} \lambda_0(\tau) \, d\tau\right]
+\]
+
+The negative log-likelihood is:
+\[
+-\ell(w) = \sum_{j=1}^N \left[\exp(w^T x^j) \int_0^{t^j} \lambda_0(\tau) \, d\tau - w^T x^j\right] + \text{const}
+\]
+
+Each term $\exp(w^T x^j) \int_0^{t^j} \lambda_0(\tau) \, d\tau - w^T x^j$ is:
+\begin{itemize}
+    \item $\exp(w^T x^j)$ is convex in $w$% (composition of convex increasing $\exp$ with affine $w^T x^j$)
+    \item $\int_0^{t^j} \lambda_0(\tau) \, d\tau \geq 0$ (since $\lambda_0 \ge 0$), so $\exp(w^T x^j) \int_0^{t^j} \lambda_0(\tau) \, d\tau$ is convex
+    \item $-w^T x^j$ is affine (hence convex)
+\end{itemize}
+
+The sum of convex functions is convex, so $-\ell(w)$ is convex, and the maximum likelihood estimation of $w$ is a convex optimization problem.
+
+The problem can be written as:
+\[
+\begin{aligned}
+\text{minimize} \quad & \sum_{j=1}^N \left[\int_0^{t^j} \lambda_0(\tau) \, d\tau \exp(w^T x^j) - w^T x^j\right]
+\end{aligned}
+\]
+%which is an unconstrained convex optimization problem in $w$.

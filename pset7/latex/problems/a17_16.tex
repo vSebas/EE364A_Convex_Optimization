@@ -1,0 +1,127 @@
+\section*{A17.16 Efficient Solution of Basic Portfolio Optimization Problem}
+
+% \textbf{Problem:} Consider the portfolio optimization problem:
+% \[
+% \begin{aligned}
+% \text{maximize} \quad & \mu^T w - (\lambda/2) w^T \Sigma w \\
+% \text{subject to} \quad & \mathbf{1}^T w = 1
+% \end{aligned}
+% \]
+% with variable $w \in \mathbf{R}^n$, and data $\mu$ (mean return), $\Sigma \in \mathbf{S}_{++}^n$ (return covariance), $\lambda > 0$ (risk aversion).
+
+% The return covariance has factor form $\Sigma = FQF^T + D$, where $F \in \mathbf{R}^{n \times k}$ (factor loading matrix, rank $k$), $Q \in \mathbf{S}_{++}^k$ (factor covariance), and $D$ is diagonal (idiosyncratic risk). Typical dimensions: $n = 2500$ assets, $k = 30$ factors.
+
+\subsection*{(a)}
+Ignoring the low-rank-plus-diagonal structure and treating $\Sigma$ as dense (assume $\lambda=1$),
+the problem can be solved via the KKT system or by factoring $\Sigma$ (e.g., Cholesky) and doing a few solves.
+The dominant cost is the factorization of an $n\times n$ dense matrix, so the flop count is
+\[
+\boxed{O(n^3)}.
+\]
+
+\subsection*{(b)}
+Assume $\lambda=1$ and exploit $\Sigma = FQF^T + D$ with $k\ll n$ using Woodbury:
+\[
+(D+FQF^T)^{-1}
+= D^{-1} - D^{-1}F\left(Q^{-1}+F^T D^{-1}F\right)^{-1}F^T D^{-1}.
+\]
+Precompute
+\[
+B = F^T D^{-1}F \in \mathbf{R}^{k\times k},\qquad
+M = Q^{-1}+B \in \mathbf{S}_{++}^k,
+\]
+and factor $M$ (Cholesky).
+To compute the optimal portfolio, use the KKT conditions
+\[
+\Sigma w + \nu \mathbf{1} = \mu,\qquad \mathbf{1}^T w = 1.
+\]
+Let
+\[
+q=\Sigma^{-1}\mu,\qquad p=\Sigma^{-1}\mathbf{1}.
+\]
+Then
+\[
+\nu=\frac{\mathbf{1}^T q - 1}{\mathbf{1}^T p},\qquad
+w = q - \nu p.
+\]
+Each application of $\Sigma^{-1}$ to a vector $v$ is computed via Woodbury:
+\[
+\Sigma^{-1}v
+= D^{-1}v - D^{-1}F\,M^{-1}F^T D^{-1}v.
+\]
+\textbf{Flop count:} Forming $B=F^T D^{-1}F$ costs $O(nk^2)$, factoring $M$ costs $O(k^3)$,
+and each solve $\Sigma^{-1}v$ costs $O(nk+k^2)$. As two solves are needed (for $v=\mu$ and
+$v=\mathbf{1}$), the overall dominant cost is
+\[
+\boxed{O(nk^2+k^3)}.
+\]
+
+\subsection*{(c)}
+Random data is generated with $n=2500$, $k=30$ (random $F$, SPD $Q$, positive diagonal $D$),
+and $w^*$ is computed using both methods.
+
+\textbf{Results:}
+\begin{center}
+\begin{tabular}{lcc}
+\hline
+Method & Time (s) & Objective \\
+\hline
+Dense (part a) & 0.167 & 2298.29 \\
+Structured (part b) & 0.052 & 2298.29 \\
+\hline
+\end{tabular}
+\end{center}
+
+Speedup: $\approx 3\times$. %Relative difference $\|w_{\text{dense}} - w_{\text{struct}}\|_2 / \|w_{\text{dense}}\|_2 = 2.4 \times 10^{-11}$.
+
+\textbf{Code:}
+\begin{lstlisting}[language=Python, basicstyle=\ttfamily\footnotesize]
+import scipy.sparse as sp
+import scipy.sparse.linalg as spla
+
+D_sparse = sp.diags(D_diag, format='csr')          # (n,n)
+FQ_sparse = sp.csr_matrix(F @ Q)                   # (n,k)
+ones_n = sp.csr_matrix(np.ones((n, 1)))            # (n,1)
+zeros_k1 = sp.csr_matrix((k, 1))                   # (k,1)
+zeros_1k = sp.csr_matrix((1, k))                   # (1,k)
+
+KKT = sp.bmat([
+    [D_sparse,            FQ_sparse,  ones_n],
+    [sp.csr_matrix(-F.T), sp.eye(k),  zeros_k1],
+    [sp.csr_matrix(np.ones((1,n))), zeros_1k, None]
+], format='csr')
+rhs = np.concatenate([mu, np.zeros(k), [1.0]])
+w_star = spla.spsolve(KKT, rhs)[:n]
+\end{lstlisting}
+
+\subsection*{(d)}
+For $M$ different values of $\lambda>0$, the KKT conditions are
+\[
+\lambda \Sigma w + \nu \mathbf{1} = \mu,\qquad \mathbf{1}^T w = 1.
+\]
+From the first equation: $w = \frac{1}{\lambda}\Sigma^{-1}(\mu - \nu\mathbf{1}) = \frac{1}{\lambda}(q - \nu p)$,
+where $q=\Sigma^{-1}\mu$ and $p=\Sigma^{-1}\mathbf{1}$.
+
+Substituting into $\mathbf{1}^T w = 1$:
+\[
+\frac{1}{\lambda}(\mathbf{1}^T q - \nu \cdot \mathbf{1}^T p) = 1 \implies \nu = \frac{\mathbf{1}^T q - \lambda}{\mathbf{1}^T p}.
+\]
+Thus:
+\[
+w = \frac{1}{\lambda}\left(q - \frac{\mathbf{1}^T q - \lambda}{\mathbf{1}^T p}\,p\right)
+= \frac{p}{\mathbf{1}^T p} + \frac{1}{\lambda}\left(q - \frac{\mathbf{1}^T q}{\mathbf{1}^T p}\,p\right)
+= w_0 + \frac{1}{\lambda}w_1,
+\]
+where
+\[
+w_0=\frac{p}{\mathbf{1}^T p},\qquad
+w_1=q-\frac{\mathbf{1}^T q}{\mathbf{1}^T p}\,p.
+\]
+$p$ and $q$ are computed once (using part (b)), then $w^*(\lambda)$ is evaluated for each $\lambda$ in $O(n)$ time.
+
+\textbf{Complexity comparison:}
+\begin{itemize}
+\item Using part (b) $M$ times: $O(M(nk^2+k^3))$
+\item Using the affine formula: $O(nk^2+k^3) + O(Mn)$ (one-time precomputation $+$ $M$ evaluations)
+\end{itemize}
+The affine method is much more efficient when $M$ is large, since the expensive $\Sigma^{-1}$ computation is done only once.

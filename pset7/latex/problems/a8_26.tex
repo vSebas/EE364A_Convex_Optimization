@@ -1,0 +1,59 @@
+\section*{A8.26 Some Problems Involving a Polyhedron and a Point}
+
+%\textbf{Problem:} Let $\mathcal{P} \subset \mathbf{R}^n$ be a polyhedron described by linear inequalities, and $a \in \mathbf{R}^n$ a point. Are the following problems easy or hard? (Easy = solvable by one or a modest number of convex optimization problems.)
+
+\subsection*{(a) Find a point in $\mathcal{P}$ closest to $a$ in Euclidean norm}
+
+\textbf{Easy}
+%This is a convex quadratic program (QP):
+\[
+\begin{aligned}
+\min \quad & \|x - a\|_2 \\
+\text{s.t.} \quad & x \in \mathcal{P}
+\end{aligned}
+\]
+The objective is convex (quadratic), the constraint set $\mathcal{P}$ is convex (polyhedron), so this is a convex optimization problem solvable efficiently.
+
+\subsection*{(b) Find a point in $\mathcal{P}$ closest to $a$ in $\ell_\infty$ norm}
+
+\textbf{Easy}
+\[
+\min \| x - a \|_\infty = \min_x \max_i |x_i - a_i|
+\]
+Can be be reformulated as a linear program by introducing as scalar $t$:
+\[
+\begin{aligned}
+\min \quad & t \\
+\text{s.t.} \quad & -t \mathbf{1} \preceq x - a \preceq t \mathbf{1} \\
+& x \in \mathcal{P}
+\end{aligned}
+\]
+The constraint $\|x - a\|_\infty \le t$ is equivalent to $-t \le x_i - a_i \le t$ for all $i$, which is linear.
+\subsection*{(c) Find a point in $\mathcal{P}$ farthest from $a$ in Euclidean norm}
+
+\textbf{Hard}
+\[
+\begin{aligned}
+\max \quad & \|x - a\|_2 \\
+\text{s.t.} \quad & x \in \mathcal{P}
+\end{aligned}
+\]
+%Maximizing a convex function over a convex set is generally non-convex. However, the maximum is attained at a vertex of the polyhedron $\mathcal{P}$ (since $\|x-a\|_2^2$ is strictly convex and the maximum of a convex function over a polytope is attained at a vertex). Finding all vertices is computationally hard in general (exponentially many vertices possible).
+Maximizing a convex function over a convex set is generally non-convex. The maximum is at some vertex of $P$, and enumerating the vertices can be exponential.
+
+\subsection*{(d) Find a point in $\mathcal{P}$ farthest from $a$ in $\ell_\infty$ norm}
+
+\textbf{Easy}
+\[
+\|x-a\|_\infty = \max_i |x_i-a_i|
+= \max_i \max\{x_i-a_i,\ a_i-x_i\}
+\]
+Therefore,
+\[
+\max_{x\in\mathcal{P}} \|x-a\|_\infty
+= \max_{i=1,\dots,n}\ \max\left\{
+\max_{x\in\mathcal{P}} (x_i-a_i),\ 
+\max_{x\in\mathcal{P}} (a_i-x_i)
+\right\}
+\]
+Each inner problem is a linear program (maximize or minimize $x_i$ over $\mathcal{P}$), so the overall problem can be solved by solving $2n$ LPs and taking the best value.

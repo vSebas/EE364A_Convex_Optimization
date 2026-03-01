@@ -1,2 +1,78 @@
 \section*{A19.10 Scheduling}
 
+We have $n$ tasks with:
+\begin{itemize}
+    \item Start time $s_i \geq 0$, finish time $f_i \geq s_i$
+    \item Duration $d_i = f_i - s_i \geq m_i$ (minimum duration)
+    \item Cost $\phi_i(d_i) = \alpha_i / (d_i - m_i)$ for $d_i > m_i$
+    \item Precedence constraints: $(i,j) \in \mathcal{P}$ means task $j$ starts after task $i$ finishes
+    \item Completion time $T = \max_i f_i$
+\end{itemize}
+
+\subsection*{(a) Pareto optimal trade-off}
+
+For fixed $T$, minimize total cost:
+\begin{align*}
+\text{minimize} \quad & \sum_{i=1}^{n} \frac{\alpha_i}{d_i - m_i} \\
+\text{subject to} \quad & s_i \geq 0 \\
+& d_i \geq m_i + \epsilon \\
+& s_i + d_i \leq T \\
+& s_j \geq s_i + d_i \quad \forall (i,j) \in \mathcal{P}
+\end{align*}
+
+This is convex since $1/(d_i - m_i)$ is convex for $d_i > m_i$.
+
+By solving for various $T \in [T_{\min}, T_{\max}]$, we trace out the Pareto frontier.
+
+\subsection*{(b) Results}
+
+\textbf{Code:}
+\begin{lstlisting}[language=Python, basicstyle=\ttfamily\footnotesize]
+def solve_schedule(T_max):
+    s = cp.Variable(n)
+    d = cp.Variable(n)
+    f = s + d
+    cost = cp.sum(cp.multiply(alpha, cp.inv_pos(d - m)))
+    constraints = [s >= 0, d >= m + 1e-4, f <= T_max]
+    for i, j in P:
+        constraints.append(s[j] >= f[i])
+    prob = cp.Problem(cp.Minimize(cost), constraints)
+    prob.solve()
+    return prob.value, s.value, f.value
+\end{lstlisting}
+
+\textbf{Pareto frontier:} $T \in [10, 30]$, Cost $C \in [1.59, 8.26]$
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{img/a19_10_tradeoff.png}
+    \caption{Optimal trade-off curve: Cost vs Completion time}
+\end{figure}
+
+\textbf{Optimal schedule for $T = 20$:}
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+Task & Start & Finish & Duration & Cost \\
+\hline
+1 & 0.00 & 8.03 & 8.03 & 0.21 \\
+2 & 0.00 & 5.19 & 5.19 & 0.49 \\
+3 & 5.19 & 11.97 & 6.78 & 0.18 \\
+4 & 5.19 & 10.64 & 5.45 & 0.36 \\
+5 & 5.19 & 20.00 & 14.81 & 0.08 \\
+6 & 0.00 & 15.49 & 15.49 & 0.08 \\
+7 & 8.03 & 15.49 & 7.46 & 0.20 \\
+8 & 11.97 & 20.00 & 8.03 & 0.21 \\
+9 & 10.64 & 15.49 & 4.84 & 0.38 \\
+10 & 15.49 & 20.00 & 4.51 & 0.46 \\
+\hline
+\multicolumn{4}{|r|}{\textbf{Total Cost:}} & $\boxed{2.66}$ \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{img/a19_10_schedule.png}
+    \caption{Gantt chart of optimal schedule for $T = 20$}
+\end{figure}

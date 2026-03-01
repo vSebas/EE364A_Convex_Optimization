@@ -1,2 +1,57 @@
 \section*{A6.13 Fitting with censored data}
 
+\subsection*{(a)}
+We have data points $(x^{(k)}, y^{(k)})$ for $k = 1, \ldots, K$, where:
+\begin{itemize}
+    \item $y^{(1)}, \ldots, y^{(M)}$ are observed (uncensored)
+    \item $y^{(M+1)}, \ldots, y^{(K)}$ are censored (known to be $> D$)
+\end{itemize}
+For censored data, $y^{(k)}$ for $k > M$ are optimization variables with constraints $y^{(k)} \geq D$.
+
+So the problem becomes:
+\begin{align*}
+\text{minimize} \quad & \sum_{k=1}^{M} (y^{(k)} - c^T x^{(k)})^2 + \sum_{k=M+1}^{K} (y_{\text{cens}}^{(k)} - c^T x^{(k)})^2 \\
+\text{s.t.} \quad & y_{\text{cens}}^{(k)} \geq D, \quad k = M+1, \ldots, K
+\end{align*}
+
+\subsection*{(b)}
+
+\textbf{Censored fitting estimate} $\hat{c}$:
+\begin{verbatim}
+[-0.406  0.408 -0.323 -0.649  0.340 -1.865 -0.918 -1.171 -0.345 -0.466
+ -0.216  0.253  0.524  0.315 -0.505  0.584 -0.186  1.639  0.682  0.107]
+\end{verbatim}
+\textbf{Least-squares estimate} $\hat{c}_{ls}$ (ignoring censored data):
+\begin{verbatim}
+[-0.869  0.388 -0.079 -0.527  0.448 -2.146 -0.792 -0.866 -0.183 -0.251
+ -0.158  0.555  0.428  0.069 -0.434  0.357 -0.202  2.007  0.811  0.094]
+\end{verbatim}
+\textbf{Relative errors:}
+\[
+\frac{\|c_{\text{true}} - \hat{c}\|_2}{\|c_{\text{true}}\|_2} = \boxed{0.131} \quad \text{(censored fitting)}
+\]
+\[
+\frac{\|c_{\text{true}} - \hat{c}_{ls}\|_2}{\|c_{\text{true}}\|_2} = \boxed{0.333} \quad \text{(ignoring censored data)}
+\]
+The censored fitting method achieves significantly lower error than simply ignoring the censored data points, demonstrating the value of incorporating the constraint information.
+
+\subsubsection*{Code:}
+\begin{lstlisting}[language=Python, basicstyle=\ttfamily\footnotesize]
+# Censored fitting
+c_var = cp.Variable((n, 1))
+y_cens = cp.Variable((K - M, 1))
+residuals_obs = y - X_obs.T @ c_var
+residuals_cens = y_cens - X_cens.T @ c_var
+objective = cp.sum_squares(residuals_obs) + cp.sum_squares(residuals_cens)
+constraints = [y_cens >= D]
+prob = cp.Problem(cp.Minimize(objective), constraints)
+prob.solve()
+c_hat = c_var.value
+
+# Least squares ignoring censored data
+c_ls = np.linalg.lstsq(X_obs.T, y.flatten(), rcond=None)[0]
+
+# Compute relative errors
+rel_error_censored = np.linalg.norm(c_true.flatten() - c_hat.flatten()) / np.linalg.norm(c_true.flatten())
+rel_error_ls = np.linalg.norm(c_true.flatten() - c_ls.flatten()) / np.linalg.norm(c_true.flatten())
+\end{lstlisting}

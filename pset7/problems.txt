@@ -1,0 +1,13 @@
+Homework 7 (due 2/27): 
+From bv_cvxbook.pdf:
+9.8: Steepest Descent Method in l-infinity norm. (page 515)
+
+From additional_exercises.pdf:
+A7.12: Cox Proportional Hazards Model. (page 99)
+A8.16: Fitting a Sphere to Data. (page 139)
+A8.26: Some Problems Involving a Polyhedron and a Point. (page 144)
+A9.10: True or False. (No justification required) (page 149)
+A9.13: Newton's Method in Machine Learning Problems. (page 150)
+A13.2: T/F (Flop Counts). (No justification required) (page 165)
+A13.3: Ridge Regression. (page 165)
+A17.16: Efficient Solution of Basic Portfolio Optimization Problem. (page 217)

@@ -1,2 +1,51 @@
 \section*{A17.30 Maximum Sharpe ratio portfolio}
 
+%Consider a portfolio with weights $x \in \mathbf{R}^n$, mean return $\mu \in \mathbf{R}^n$, and covariance $\Sigma \in \mathbf{S}^n_{++}$.
+
+%The Sharpe ratio is:
+%\[
+%S(x) = \frac{\mu^T x}{\|\Sigma^{1/2} x\|_2}
+%\]
+
+\%textbf{Problem:} Maximize $S(x)$ subject to $\mathbf{1}^T x = 1$ and $\|x\|_1 \leq L^{\max}$.
+
+%\subsection*{(a) Quasiconvexity}
+\subsection*{(a)}
+
+The Sharpe ratio $S(x)$ is quasiconvex for $\mu^T x > 0$.
+
+The sublevel set $\{x : S(x) \leq t\}$ for $t > 0$ is:
+\[
+\{x : \mu^T x \leq t \|\Sigma^{1/2} x\|_2\}
+\]
+
+This is equivalent to $\|\Sigma^{1/2} x\|_2 \geq (\mu^T x)/t$, which defines a convex set (second-order cone constraint). Hence $S(x)$ is quasiconvex.
+
+\subsection*{(b) Transformation to convex problem}
+
+Let $y = x / (\mu^T x)$ (for $\mu^T x > 0$). Then:
+\begin{itemize}
+    \item $\mu^T y = 1$
+    \item $\mathbf{1}^T y = 1/(\mu^T x)$
+    \item $S(x) = 1/\|\Sigma^{1/2} y\|_2$
+\end{itemize}
+
+Maximizing $S(x)$ is equivalent to minimizing $\|\Sigma^{1/2} y\|_2$ subject to $\mu^T y = 1$ and the transformed leverage constraint $\|y\|_1 \leq L^{\max} \cdot \mathbf{1}^T y$.
+
+\textbf{Results} (for $n=10$ assets, $L^{\max} = 1.5$):
+\begin{itemize}
+    \item Expected return: 0.129
+    \item Standard deviation: 0.061
+    \item Sharpe ratio: $\boxed{2.13}$
+    \item Leverage $\|x\|_1$: 1.32
+\end{itemize}
+
+\textbf{Code:}
+\begin{lstlisting}[language=Python, basicstyle=\ttfamily\footnotesize]
+y = cp.Variable(n)
+constraints = [mu @ y == 1, cp.sum(y) >= 0,
+               cp.norm1(y) <= L_max * cp.sum(y)]
+prob = cp.Problem(cp.Minimize(cp.quad_form(y, Sigma)), constraints)
+prob.solve()
+x_opt = y.value / np.sum(y.value)
+\end{lstlisting}

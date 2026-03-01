@@ -1,0 +1,30 @@
+\section*{9.8 Steepest descent method in $\ell_\infty$-norm}
+
+%\textbf{Problem:} Explain how to find a steepest descent direction in the $\ell_\infty$-norm, and give a simple interpretation.
+
+%\subsection*{Solution}
+
+The steepest descent direction is defined as:
+\[
+\Delta x_{\text{sd}} = \arg\min_v \{\nabla f(x)^T v \mid \|v\|_\infty \le 1\}
+\]
+
+The $\ell_\infty$-norm ball is $\{v \mid \|v\|_\infty \le 1\} = \{v \mid -1 \le v_i \le 1, \; i = 1, \ldots, n\}$, which is a hypercube.
+
+To minimize the linear function $\nabla f(x)^T v = \sum_{i=1}^n (\nabla f(x))_i v_i$ over this hypercube, each term is minimized independently:
+\[
+\min_{-1 \le v_i \le 1} (\nabla f(x))_i v_i = -|(\nabla f(x))_i|
+\]
+achieved when $v_i = -\text{sign}((\nabla f(x))_i)$.
+
+Therefore, the steepest descent direction in the $\ell_\infty$-norm is:
+\[
+\boxed{(\Delta x_{\text{sd}})_i = -\text{sign}((\nabla f(x))_i), \quad i = 1, \ldots, n}
+\]
+
+%The optimal value is:
+%\[
+%\nabla f(x)^T \Delta x_{\text{sd}} = -\sum_{i=1}^n |(\nabla f(x))_i| = -\|\nabla f(x)\|_1
+%\]
+
+For each coordinate, move in the opposite direction of the gradient's sign.
